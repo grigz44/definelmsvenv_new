@@ -65,7 +65,7 @@ path('em/', views.addexmaster, name='homeem'),
 path('deleteem/', views.delete_data_exmaster, name='deleteem'),
 path('editst/', views.edit_data_exmaster,name='editst'),
 
-############opations#################
+############options#################
 path('op/', views.addoptions, name='op'),
 path('deleteop/', views.delete_data_addoptions, name='deleteop'),
 path('editop/', views.edit_data_addoptions,name='editop'),
