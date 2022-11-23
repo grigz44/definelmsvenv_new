@@ -358,15 +358,15 @@ def add_subject(request):
                 form.save()
                 designation = subject.objects.all()
                 context = {'form': form, 'st': designation}
-                # return render(request, 'subject/subject.html',context)
-                return render(request, 'User_UI/index.html',context)
+                return render(request, 'subject/subject.html',context)
+                # return render(request, 'User_UI/index.html',context)
                 
         else:
             form = subjectform()
         designation = subject.objects.all()
         context = {'form': form, 'st': designation}
-        # return render(request, 'subject/subject.html', context)
-        return render(request, 'User_UI/index.html',context)
+        return render(request, 'subject/subject.html', context)
+        # return render(request, 'User_UI/index.html',context)
 
 
 @csrf_exempt
