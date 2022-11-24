@@ -5,5 +5,5 @@ from lmsmainapp.views import*
 
 urlpatterns = [
     path('', views.temp, name='index'),
-    path('vexam', views.vexam, name='vexam'),
+    path('vexam/', views.vexam, name='vexam'),
 ]
