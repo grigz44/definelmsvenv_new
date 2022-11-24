@@ -15,7 +15,7 @@ def vexam(request):
     total_exam     = exam.objects.count()
     total_question = question_bank.objects.count()
     context={
-        'exam'    :[total_exam,total_question,]
+        'exam'    :[total_exam,total_question]
         
     }
 
