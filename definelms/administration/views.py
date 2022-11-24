@@ -168,14 +168,14 @@ def save_data(request):
     if request.method == 'POST':
         form = designationForm(request.POST)
         if form.is_valid():
-            did = request.POST.get('dsnid')
+            cid = request.POST.get('dsnid')
             designation1 = request.POST['designation']
-            print('student id',did)
+            print('student id',cid)
 
-            if(did == ''):
+            if(cid == ''):
                 d = designation(designation=designation1)
             else:
-                d = designation(id=did, designation=designation1)
+                d = designation(id=cid, designation=designation1)
             d.save()
 
             dsn = designation.objects.values()
