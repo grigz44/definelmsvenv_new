@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+{% load static %}
 <head>
     <meta charset="utf-8">
     <title>eLEARNING - eLearning HTML Template</title>
@@ -9,7 +9,7 @@
     <meta content="" name="description">
 
     <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    <link href="{% static 'userui/img/favicon.ico' %}" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,14 +21,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="lib/animate/animate.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="{% static 'userui/lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'userui/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'userui/css/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="{% static 'userui/css/style.css' %}" rel="stylesheet">
 </head>
 
 <body>
@@ -51,16 +51,14 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="{% url 'index' %}" class="nav-item nav-link ">Home</a>
-                <a href="{% url 'about' %}" class="nav-item nav-link ">About</a>
-                <a href="{% url 'vcourse' %}" class="nav-item nav-link">Courses</a>
-                <a href="{% url 'vexam' %}" class="nav-item nav-link">EXAMS</a>
+                <a href="{% url 'index' %}" class="nav-item nav-link">Home</a>
+                <a href="{% url 'about' %}" class="nav-item nav-link">About</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown">Pages</a>
                     <div class="dropdown-menu fade-down m-0">
                         <a href="team.html" class="dropdown-item">Our Team</a>
                         <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                        <a href="404.html" class="dropdown-item active">404 Page</a>
+                        <a href="{% url '404' %}" class="dropdown-item active">404 Page</a>
                     </div>
                 </div>
                 <a href="{% url 'contact' %}" class="nav-item nav-link">Contact</a>
@@ -99,7 +97,7 @@
                     <i class="bi bi-exclamation-triangle display-1 text-primary"></i>
                     <h1 class="display-1">404</h1>
                     <h1 class="mb-4">Page Not Found</h1>
-                    <p class="mb-4">We're sorry, the page you have looked for does not exist in our website! Maybe go to our home page or try to use a search?</p>
+                    <p class="mb-4">We’re sorry, the page you have looked for does not exist in our website! Maybe go to our home page or try to use a search?</p>
                     <a class="btn btn-primary rounded-pill py-3 px-5" href="">Go Back To Home</a>
                 </div>
             </div>
@@ -120,13 +118,13 @@
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="{% static 'userui/lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'userui/lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'userui/lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'userui/lib/owlcarousel/owl.carousel.min.js' %}"></script>
 
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <script src="{% static 'userui/js/main.js' %}"></script>
 </body>
 
 </html>

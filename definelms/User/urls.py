@@ -5,8 +5,11 @@ from lmsmainapp.views import*
 
 urlpatterns = [
     path('', views.temp, name='index'),
+    path('login/', views.login, name='login'),
     path('contact/', views.contact, name='contact'),
     path('about/', views.about, name='about'),
     path('vexam/', views.vexam, name='vexam'),
-    path('vcourse/', views.vcourse, name='vcourse'),
+    path('tutorial/', views.tutorial, name='tut'),
+    path('404/', views.error404, name='404'),
+    path('vcourse/<int:id>', views.vcourse, name='vcourse'),
 ]

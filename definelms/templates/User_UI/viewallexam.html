@@ -54,7 +54,6 @@
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="{% url 'index' %}" class="nav-item nav-link">Home</a>
                 <a href="{% url 'about' %}" class="nav-item nav-link ">About</a>
-                <a href="{% url 'vcourse' %}" class="nav-item nav-link ">Courses</a>
                 <a href="{% url 'vexam' %}" class="nav-item nav-link active">EXAMS</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
@@ -105,25 +104,23 @@
     <!-- Courses Start -->
        
             <div class="row g-4 justify-content-center">
-                {% for st in exm %}
+                {% for exm in exm %}
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="course-item bg-light">
-                        <a href="#">
+                        <a href="{% url 'vcourse' exm.id %}">
                         <div class="position-relative overflow-hidden">
                             <img class="img-fluid" src="{% static 'userui/img/course-1.jpg' %}" alt="">
                         </div>
                         <div class="text-center p-4 pb-0">
                             
-                            <h3 class="mb-0">{{st.exam_name}}</h3>
+                            <h3 class="mb-0">{{exm.exam_name}}</h3>
                             <h5 class="mb-4"></h5>
                             <div class="mb-3" >
-                               <font color="black"><small>{{st.description}}</small></font>
+                               <font color="black"><small>{{exm.description}}</small></font>
                             </div>
                             
                         </div>
-                        <div class="d-flex border-top">
-                         <small class="flex-fill text-center border-end py-2"></small>
-                        </div></a>
+                       </a>
                     </div>
                 </div>
                         {% endfor %}

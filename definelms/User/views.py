@@ -2,6 +2,13 @@ from django.shortcuts import render,redirect
 from lmsmainapp.forms import *
 from lmsmainapp.models import *
 
+
+############### login #################
+
+def login(request):
+
+    return render(request, 'User_UI/login.html')
+  
 #################### home ###############
 def temp(request):
 
@@ -28,9 +35,33 @@ def vexam(request):
 ############### all Courses ###################
 
 
-def vcourse(request):
-        cr = course.objects.all()
+def vcourse(request,id):
+
+        exm = course.objects.filter(exam=id)
+      
         context = {
-            'cr':cr
-            }
+            'exm':exm
+        }
         return render(request, 'User_UI/allcourse.html',context)
+
+
+
+################### video tutorials #########################
+
+
+
+
+def tutorial(request):
+
+    return render(request, 'User_UI/tutorials.html')
+
+
+
+
+def error404(request):
+
+    return render(request, 'User_UI/404.html')
+
+
+
+
