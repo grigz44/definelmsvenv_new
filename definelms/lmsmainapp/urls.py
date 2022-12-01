@@ -49,7 +49,7 @@ urlpatterns = [
     path('mcq/<id>', api_views.GetQuestions.as_view(), name="subtopic"),
 
 
-  
+    path('videoapi/', api_views.VideoClassView.as_view(), name="vdoapi"),
     
     # path('home/', views.home_page,name="home"),
 

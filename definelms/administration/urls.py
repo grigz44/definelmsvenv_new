@@ -70,4 +70,11 @@ path('op/', views.addoptions, name='op'),
 path('deleteop/', views.delete_data_addoptions, name='deleteop'),
 path('editop/', views.edit_data_addoptions,name='editop'),
 
+
+
+############videoclass#################
+path('video/', views.addvideo, name='vdo'),
+path('deletevdo/', views.deletevideo, name='deletevdo'),
+# path('editop/', views.edit_data_addoptions,name='editop'),
+
 ]

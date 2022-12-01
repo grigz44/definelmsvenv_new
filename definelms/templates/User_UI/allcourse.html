@@ -107,6 +107,7 @@
                 {% for st in exm %}
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="course-item bg-light">
+                        <a href="{% url 'vclass' st.id %}">
                         <div class="position-relative overflow-hidden">
                             <img class="img-fluid" src="{{st.image.url}}" alt="">
                         </div>
@@ -114,11 +115,11 @@
                             <h3 class="mb-0">{{st.course_name}}</h3>
                             <h5 class="mb-4"></h5>
                             <div class="mb-3">
-                                <small>{{st.description}}</small>
+                                <font color="black"> <small>{{st.description}}</small></font>
                             </div>
                             
                         </div>
-                       
+                    </a>
                     </div>
                 </div>
                         {% endfor %}

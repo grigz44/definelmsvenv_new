@@ -570,3 +570,44 @@ def edit_data_addoptions(request):
         examo = topic.objects.get(pk=id)
         exam_data = {'id':examo.id, 'exam_name':examo.exam_name,'description':examo.description,'remarks':examo.remarks}
         return JsonResponse(exam_data)
+
+
+
+################# add video_class ###########################
+
+def addvideo(request):
+    if 'username' not in request.session:
+        return redirect('login')
+    else:
+        if request.method == 'POST':
+            form = videoform(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                videooo = video_class.objects.all()
+                context = {'form': form, 'st': videooo}
+                return render(request, 'videoclass/videoclass.html',context)
+        else:
+            form = videoform()
+        videooo=video_class.objects.all()
+        context = {'form': form, 'st': videooo}
+        return render(request, 'videoclass/videoclass.html', context)
+
+
+@csrf_exempt
+def deletevideo(request):
+    if request.method == 'POST':
+        id = request.POST.get('sid')
+        s  = video_class.objects.get(pk=id)
+        s.delete()
+        return JsonResponse({'status':1})
+    else:
+        return JsonResponse({'status':0})    
+
+
+# @csrf_exempt
+# def editvideo(request):
+#     if request.method == 'POST':
+#         id = request.POST.get('sid')
+#         examo = video_class.objects.get(pk=id)
+#         exam_data = {'id':examo.id, 'topic_name':examo.topic_name, 'description':examo.description, 'subject':examo.subject, 'user':examo.user}
+#         return JsonResponse(exam_data)

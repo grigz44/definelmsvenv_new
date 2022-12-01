@@ -243,3 +243,16 @@ class question_reporting(models.Model):
 
 
 
+class video_class(models.Model):
+    id               = models.AutoField(primary_key=True)
+    course           = models.ForeignKey(course,on_delete=models.CASCADE)
+    class_name       = models.CharField(max_length=250,default="")
+    image            = models.ImageField(upload_to='videoclass')
+    duration         = models.CharField(max_length=10,default="")
+    price            = models.IntegerField(default=0)
+    is_paid          = models.BooleanField(default=False)
+    is_active        = models.BooleanField(default=False)
+    videolink        = models.CharField(max_length=500,default="")
+    user             = models.ForeignKey(login,on_delete=models.CASCADE)
+    class Meta:
+        db_table='video_class'

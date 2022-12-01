@@ -150,3 +150,19 @@ class loginform(forms.ModelForm):
              'password' : forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'})
         }
 
+
+class videoform(forms.ModelForm):
+    class Meta:
+        model = video_class
+        fields ='__all__'
+        widgets = {
+            'course'     : forms.Select(attrs={'class':'form-control','id':'courseid'}),
+            'class_name': forms.TextInput(attrs={'class':'form-control','id':'class_nameid'}),
+            'image' : forms.FileInput(attrs={'class':'form-control','id':'imageid'}),
+            'duration': forms.TextInput(attrs={'class':'form-control','id':'durationid'}),
+            'price': forms.NumberInput(attrs={'class':'form-control','id':'priceid'}),
+            'is_paid': forms.NullBooleanSelect(attrs={'class':'form-control','id':'is_paidid'}),
+            'is_active': forms.NullBooleanSelect(attrs={'class':'form-control','id':'is_activeid'}),
+            'videolink'   : forms.TextInput(attrs={'class':'form-control','id':'videolinkid'}),
+            'user'       : forms.Select(attrs={'class':'form-control','id':'userid'}),
+        }

@@ -588,3 +588,38 @@ from django.contrib.auth.decorators import login_required
 
 
 
+#video class api
+
+class VideoClassView(APIView):
+    def get(self,request,id=None):
+        if id is not None:
+            subjects = video_class.objects.get(id=id)
+            serializer = VideoclassSerializer(subjects)
+            return Response(serializer.data) 
+        subjects = video_class.objects.all()       
+        serializer = VideoclassSerializer(subjects,many=True)
+        return Response(serializer.data)
+
+
+    def post(self,req):
+        serializer = VideoclassSerializer(data=req.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)  
+
+
+    def delete(self,req,id):
+        video_class.objects.get(id=id).delete()
+        return Response({"msg":1}) 
+
+
+    def put(self,req,id):
+        subjects = video_class.objects.filter(id=id).first()
+        serializer = VideoclassSerializer(subjects,data=req.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)

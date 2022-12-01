@@ -51,9 +51,9 @@ def vcourse(request,id):
 
 
 
-def tutorial(request):
+# def tutorial(request):
 
-    return render(request, 'User_UI/tutorials.html')
+#     return render(request, 'User_UI/tutorials.html')
 
 
 
@@ -61,6 +61,20 @@ def tutorial(request):
 def error404(request):
 
     return render(request, 'User_UI/404.html')
+
+
+################ video class ############################
+
+
+
+def vclass(request,id):
+
+        st = video_class.objects.filter(course=id)
+      
+        context = {
+            'vde':st
+        }
+        return render(request, 'User_UI/tutorials.html',context)
 
 
 
