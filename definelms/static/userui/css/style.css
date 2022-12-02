@@ -871,7 +871,7 @@ a {
 }
 
 .container1 .video-list-container::-webkit-scrollbar-thumb{
-   background-color: #696d6d;
+   background-color: hsl(180, 2%, 42%);
    border-radius: 5px;
    
 }
@@ -879,11 +879,11 @@ a {
 .container1 .video-list-container .list{
    display: flex;
    align-items: center;
-   gap:15px;
+   gap:50px;
    padding:10px;
-   background-color: #eee;
+   background-color: rgba(143, 143, 143, 0.466);
    cursor: pointer;
-   border-radius: 5px;
+   border-radius: 8px;
    margin-bottom: 10px;
 }
 
@@ -906,8 +906,10 @@ a {
 
 .container1 .video-list-container .list .list-title{
    font-size: 17px;
-   color:#111313;
+   color:#030303;
 }
+
+
 
 
 

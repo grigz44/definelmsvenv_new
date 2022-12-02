@@ -623,3 +623,41 @@ class VideoClassView(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+
+
+#comment clear api
+
+
+class commentview(APIView):
+    def get(self,request,id=None):
+        if id is not None:
+            subjects = comment.objects.get(id=id)
+            serializer = CommentSerializer(subjects)
+            return Response(serializer.data) 
+        subjects = comment.objects.all()       
+        serializer = CommentSerializer(subjects,many=True)
+        return Response(serializer.data)
+
+
+    def post(self,req):
+        serializer = CommentSerializer(data=req.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)  
+
+
+    def delete(self,req,id):
+        comment.objects.get(id=id).delete()
+        return Response({"msg":1}) 
+
+
+    def put(self,req,id):
+        subjects = comment.objects.filter(id=id).first()
+        serializer = CommentSerializer(subjects,data=req.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)

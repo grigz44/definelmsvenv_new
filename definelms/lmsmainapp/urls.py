@@ -50,6 +50,10 @@ urlpatterns = [
 
 
     path('videoapi/', api_views.VideoClassView.as_view(), name="vdoapi"),
+
+
+    path('commentclear/', api_views.commentview.as_view(), name="commentclear"),
+    path('commentclear/<id>', api_views.commentview.as_view(), name="commentedit"),
     
     # path('home/', views.home_page,name="home"),
 

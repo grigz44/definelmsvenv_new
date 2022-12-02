@@ -256,3 +256,13 @@ class video_class(models.Model):
     user             = models.ForeignKey(login,on_delete=models.CASCADE)
     class Meta:
         db_table='video_class'
+
+
+class comment(models.Model):
+    id               = models.AutoField(primary_key=True)
+    video            = models.ForeignKey(video_class,on_delete=models.CASCADE)
+    user             = models.ForeignKey(login,on_delete=models.CASCADE)
+    datetime         = models.DateTimeField(auto_now_add=True)
+    comment          = models.CharField(max_length=5000,default="")
+    class Meta:
+        db_table='comment'

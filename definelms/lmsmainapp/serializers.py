@@ -107,3 +107,9 @@ class VideoclassSerializer(serializers.ModelSerializer):
     class Meta:
         model=video_class
         fields='__all__'
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=comment
+        fields='__all__'

@@ -84,15 +84,15 @@
       
         <div class="main-video-container">
             
-            <iframe width="1060" height="550" src="https://www.youtube.com/embed/tgbNymZ7vqY" loop controls class="main-video" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay;  encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <h3 class="main-vid-title">house flood animation</h3>
+            <iframe width="1060" height="550" name="iframe" src="{% static 'userui/gif/animation.gif' %}" loop controls class="main-video" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay;  encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            
              <!-- 404 End -->
    
         </div>
       
-         <div class="video-list-container">
+         <div class="video-list-container active" >
             {% for vd in vde %}
-            <a href={{vd.videolink}}>
+            <a href={{vd.videolink}}  target="iframe" class="nav-item nav-link">
             <div class="list">
             <img  src={{vd.image.url}} class="list-video"></img > 
                <h3 class="list-title">{{vd.class_name}}</h3>
@@ -114,7 +114,7 @@
 	<input id="radio3" type="radio" name="css-tabs">
 	<input id="radio4" type="radio" name="css-tabs">
 	<div id="tabs">
-		<label id="tab1" for="radio1">Home</label>
+		<label id="tab1" for="radio1">Comment</label>
 		<label id="tab2" for="radio2">Services</label>
 		<label id="tab3" for="radio3">Locations</label>
 		<label id="tab4" for="radio4">Profile</label>
@@ -155,7 +155,7 @@
     
 
     <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top" ><i class="bi bi-arrow-up"></i></a>
 
 
     <!-- JavaScript Libraries -->
