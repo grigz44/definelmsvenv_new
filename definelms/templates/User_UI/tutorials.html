@@ -28,17 +28,7 @@
     <link href="{% static 'userui/css/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="{% static 'userui/css/style.css' %}" rel="stylesheet">
 
-    <script>
-
-function alertfunction(){
-
-            var classid=document.getElementById("classid").value;
-
-            alert(classid);
-        }
-    </script>
 </head>
 
 <body>
@@ -104,8 +94,7 @@ function alertfunction(){
             {% for vd in vde %}
            
             <input type="hidden" value="{{vd.class_name}}" id="classid"/>
-            <a href={{vd.videolink}}  target="iframe" class="nav-item nav-link" onclick="alertfunction()">
-            <a href={{vd.videolink}}  target="iframe" class="nav-item nav-link" onclick="alertfunction()"></a>
+            <a href={{vd.videolink}}  target="iframe" class="nav-item nav-link">
             <div class="list">
             <img  src={{vd.image.url}} class="list-video"></img > 
                <h3 class="list-title">{{vd.class_name}}</h3>
