@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'import_export',
     'crispy_forms',
     'User',
+    'corsheaders',
+   
 ]
 
 MIDDLEWARE = [
@@ -54,6 +56,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'definelms.urls'
@@ -141,3 +145,8 @@ MEDIA_URL = '/media/'
 
 # Path where media is stored
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+]

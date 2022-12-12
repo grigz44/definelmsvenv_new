@@ -81,7 +81,7 @@ def admin_login(request):
 		if user > 0:
             
 			user=login.objects.filter(username=username,password=password,role=0).first()
-			request.session['username'] = user.username
+			request.session['username'] = user.id
 			print(request.session['username'])
             
 			return redirect('home')
@@ -273,17 +273,20 @@ def add_course(request):
                 form = courseform1(request.POST, request.FILES)
                 # un=login.objects.filter(role=0).values()
                 # print('----------------',un)
-               
+                userid=request.session.get('username')
                 if form.is_valid():
-                    form.save()
-                    designation = course.objects.all()
-                    context = {'form': form, 'st': designation}
-                    return render(request, 'course/course.html',context)
+                    obj=form.save(commit=False)
+                    designation = login.objects.get(id=userid)
+                    obj.user=designation
+                    obj.save()
+                details=course.objects.all()
+                context = {'form': form, 'st': details}
+                return render(request, 'course/course.html',context)
                     
             else:
                 form = courseform1()
-            designation = course.objects.all()
-            context = {'form': form, 'st': designation}
+            details=course.objects.all()
+            context = {'form': form, 'st': details}
             return render(request, 'course/course.html', context)
 
 
@@ -354,17 +357,21 @@ def add_subject(request):
     else:
         if request.method == 'POST':
             form = subjectform(request.POST, request.FILES)
+            userid=request.session.get('username')
             if form.is_valid():
-                form.save()
-                designation = subject.objects.all()
-                context = {'form': form, 'st': designation}
-                return render(request, 'subject/subject.html',context)
-                # return render(request, 'User_UI/index.html',context)
+                obj=form.save(commit=False)
+                designation = login.objects.get(id=userid)
+                obj.user=designation
+                obj.save()
+            details=subject.objects.all()
+            context = {'form': form, 'st': details}
+            return render(request, 'subject/subject.html',context)
+                    
                 
         else:
             form = subjectform()
-        designation = subject.objects.all()
-        context = {'form': form, 'st': designation}
+        details=subject.objects.all()
+        context = {'form': form, 'st': details}
         return render(request, 'subject/subject.html', context)
         # return render(request, 'User_UI/index.html',context)
 
@@ -391,16 +398,21 @@ def add_topic(request):
     else:
         if request.method == 'POST':
             form = topicform(request.POST, request.FILES)
+            userid=request.session.get('username')
             if form.is_valid():
-                form.save()
-                designation = topic.objects.all()
-                context = {'form': form, 'st': designation}
-                return render(request, 'topic/topic.html',context)
+                obj=form.save(commit=False)
+                designation = login.objects.get(id=userid)
+                obj.user=designation
+                obj.save()
+            details=topic.objects.all()
+            context = {'form': form, 'st': details}
+            return render(request, 'topic/topic.html',context)
+                
                 
         else:
             form = topicform()
-        designation = topic.objects.all()
-        context = {'form': form, 'st': designation}
+        details=topic.objects.all()
+        context = {'form': form, 'st': details}
         return render(request, 'topic/topic.html', context)  
 
 @csrf_exempt
@@ -461,16 +473,20 @@ def add_question(request):
     else:
         if request.method == 'POST':
             form = question_bankform(request.POST, request.FILES)
+            userid=request.session.get('username')
             if form.is_valid():
-                form.save()
-                designation = question_bank.objects.all()
-                context = {'form': form, 'st': designation}
-                return render(request, 'questionbank/questionbank.html',context)
-                
+                obj=form.save(commit=False)
+                designation = login.objects.get(id=userid)
+                obj.user=designation
+                obj.save()
+            details=question_bank.objects.all()
+            context = {'form': form, 'st': details}
+            return render(request, 'questionbank/questionbank.html',context)
+                    
         else:
             form = question_bankform()
-        designation = question_bank.objects.all()
-        context = {'form': form, 'st': designation}
+        details=question_bank.objects.all()
+        context = {'form': form, 'st': details}
         return render(request, 'questionbank/questionbank.html', context)  
 
 @csrf_exempt
@@ -493,9 +509,13 @@ def addexmaster(request):
     else:
         if request.method == 'POST':
             form = exammasterForm(request.POST, request.FILES)
+            userid=request.session.get('username')
             if form.is_valid():
-                form.save()
-                designation = exam_master.objects.all()
+                obj=form.save(commit=False)
+                designation = login.objects.get(id=userid)
+                obj.user=designation
+                obj.save()
+                designation=exam_master.objects.all()
                 context = {'form': form, 'st': designation}
                 return render(request, 'exam_master/exammaster.html',context)
         else:
@@ -575,15 +595,20 @@ def edit_data_addoptions(request):
 
 ################# add video_class ###########################
 
+
 def addvideo(request):
     if 'username' not in request.session:
         return redirect('login')
     else:
         if request.method == 'POST':
             form = videoform(request.POST, request.FILES)
+            userid=request.session.get('username')
             if form.is_valid():
-                form.save()
-                videooo = video_class.objects.all()
+                obj=form.save(commit=False)
+                designation = login.objects.get(id=userid)
+                obj.user=designation
+                obj.save()
+                videooo=video_class.objects.all()
                 context = {'form': form, 'st': videooo}
                 return render(request, 'videoclass/videoclass.html',context)
         else:

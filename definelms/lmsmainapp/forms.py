@@ -31,7 +31,7 @@ class courseform1(forms.ModelForm):
     
     class Meta:
         model = course
-        fields = ('course_name','description','amount','duration','exam','image','user')
+        fields = ('course_name','description','amount','duration','exam','image')
         widgets = {
             'course_name':forms.TextInput(attrs={'class':'form-control', 'id':'course_nameid'}),
             'description':forms.TextInput(attrs={'class':'form-control', 'id':'descriptionid'}),
@@ -39,7 +39,7 @@ class courseform1(forms.ModelForm):
             'duration':forms.TextInput(attrs={'class':'form-control', 'id':'durationid'}),
             'exam':forms.Select(attrs={'class':'form-control', 'id':'examid'}),
             'image':forms.FileInput(attrs={'class':'form-control', 'id':'imageid'}),
-            'user':forms.Select(attrs={'class':'form-control', 'id':'userid'})
+            
           
         }
         
@@ -48,12 +48,12 @@ class subjectform(forms.ModelForm):
 
     class Meta:
         model = subject
-        fields = ('subject_name','description','image','user')
+        fields = ('subject_name','description','image')
         widgets = {
             'subject_name':forms.TextInput(attrs={'class':'form-control', 'id':'subject_nameid'}),
             'description':forms.TextInput(attrs={'class':'form-control', 'id':'descriptionid'}),
             'image':forms.FileInput(attrs={'class':'form-control', 'id':'imageid'}),
-            'user':forms.Select(attrs={'class':'form-control', 'id':'userid'}),
+          
         }
 
 
@@ -62,12 +62,12 @@ class topicform(forms.ModelForm):
 
     class Meta:
         model = topic
-        fields = ('topic_name','description','subject','user')
+        fields = ('topic_name','description','subject')
         widgets = {
             'topic_name':forms.TextInput(attrs={'class':'form-control', 'id':'topic_nameid'}),
             'description':forms.TextInput(attrs={'class':'form-control', 'id':'descriptionid'}),
             'subject':forms.Select(attrs={'class':'form-control', 'id':'subjectid'}),
-            'user':forms.Select(attrs={'class':'form-control', 'id':'userid'}),
+            
         }
 
 class subtopicform(forms.ModelForm):
@@ -87,7 +87,7 @@ class question_bankform(forms.ModelForm):
 
     class Meta:
         model = question_bank
-        fields = "__all__"
+        fields = ('question','subject','topic','subtopic','no_of_options','tags','is_explanation','is_image','explanation','difficulty_level','status','remark','is_reported','correct_answer','report_reason','option')
         widgets = {
             'question':forms.TextInput(attrs={'class':'form-control', 'id':'questionid'}),
             'subject':forms.Select(attrs={'class':'form-control', 'id':'subjectid'}),
@@ -99,7 +99,6 @@ class question_bankform(forms.ModelForm):
             'is_image':forms.NullBooleanSelect(attrs={'class':'form-control', 'id':'is_imageid'}),
             'explanation':forms.TextInput(attrs={'class':'form-control', 'id':'explanationid'}),
             'difficulty_level':forms.TextInput(attrs={'class':'form-control', 'id':'difficulty_levelid'}),
-            'user':forms.Select(attrs={'class':'form-control', 'id':'userid'}),
             'status':forms.TextInput(attrs={'class':'form-control', 'id':'statusid'}),
             'remark':forms.TextInput(attrs={'class':'form-control', 'id':'remarkid'}),
             'is_reported':forms.NullBooleanSelect(attrs={'class':'form-control', 'id':'is_reportedid'}),
@@ -113,7 +112,7 @@ class question_bankform(forms.ModelForm):
 class exammasterForm(forms.ModelForm):
     class Meta:
         model = exam_master
-        fields ='__all__'
+        fields =('name','exam','course','no_of_questions','total_time','no_of_attempt','exam_start_date','exam_end_date','exam_description','is_draft')
         widgets = {
             'name'       : forms.TextInput(attrs={'class':'form-control', 'id':'nameid'}),
             'exam'       : forms.Select(attrs={'class':'form-control', 'id':'examid'}),
@@ -125,7 +124,6 @@ class exammasterForm(forms.ModelForm):
             'exam_end_date': forms.SelectDateWidget(attrs={'class':'form-control', 'id':'edateid'}),
             'exam_description': forms.TextInput(attrs={'class':'form-control', 'id':'descriptionid'}),
             'is_draft'   : forms.NullBooleanSelect(attrs={'class':'form-control', 'id':'userid'}),
-            'user'       : forms.Select(attrs={'class':'form-control', 'id':'userid'}),
         }
 
 
@@ -154,7 +152,7 @@ class loginform(forms.ModelForm):
 class videoform(forms.ModelForm):
     class Meta:
         model = video_class
-        fields ='__all__'
+        fields =fields =('course','class_name','image','duration','price','is_paid','is_active','videolink')
         widgets = {
             'course'     : forms.Select(attrs={'class':'form-control','id':'courseid'}),
             'class_name': forms.TextInput(attrs={'class':'form-control','id':'class_nameid'}),
@@ -164,5 +162,15 @@ class videoform(forms.ModelForm):
             'is_paid': forms.NullBooleanSelect(attrs={'class':'form-control','id':'is_paidid'}),
             'is_active': forms.NullBooleanSelect(attrs={'class':'form-control','id':'is_activeid'}),
             'videolink'   : forms.TextInput(attrs={'class':'form-control','id':'videolinkid'}),
-            'user'       : forms.Select(attrs={'class':'form-control','id':'userid'}),
+        }
+
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = comment
+        fields = ['comment']
+        widgets = {
+            'comment': forms.TextInput(attrs={'class':'form-control', 'id':'commentid'}),
+
         }

@@ -29,6 +29,16 @@
 
     <!-- Template Stylesheet -->
     <link href="{% static 'userui/css/style.css' %}" rel="stylesheet">
+
+    <script>
+
+function alertfunction(){
+
+            var classid=document.getElementById("classid").value;
+
+            alert(classid);
+        }
+    </script>
 </head>
 
 <body>
@@ -90,13 +100,18 @@
    
         </div>
       
-         <div class="video-list-container active" >
+         <div class="video-list-container active" oncli>
             {% for vd in vde %}
-            <a href={{vd.videolink}}  target="iframe" class="nav-item nav-link">
+           
+            <input type="hidden" value="{{vd.class_name}}" id="classid"/>
+            <a href={{vd.videolink}}  target="iframe" class="nav-item nav-link" onclick="alertfunction()">
+            <a href={{vd.videolink}}  target="iframe" class="nav-item nav-link" onclick="alertfunction()"></a>
             <div class="list">
             <img  src={{vd.image.url}} class="list-video"></img > 
                <h3 class="list-title">{{vd.class_name}}</h3>
             </div></a>
+       
+            
             {% endfor %}
          </div>
       </div>
@@ -121,13 +136,43 @@
 	</div>
 	<div id="content">
 		<section id="content1"><br>
-			<h3>Based on this Dribbble</h3>
-			<p>
-				<a href="https://dribbble.com/shots/509024-Tabbed-Menu">
-					https://dribbble.com/shots/509024-Tabbed-Menu
-				</a>
-			</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed facilisis adipiscing risus, porttitor viverra urna condimentum et. Donec vestibulum lacus vel dolor dictum pellentesque. Aliquam sodales sem quis urna condimentum, sit amet elementum magna semper.</p>
+			<div class="section ">
+                <div class="container ">
+                    <h2>Comments({{post_comments_count}})</h2>
+                    <div class="row ">
+                        <div class="col-lg-8 mx-auto ">
+                            <!--display coment-->
+
+                            <div class="media-list">
+                                {% for comment in post_comments %}
+                                <div>
+                                    <img class="avatar avatar-sm mr-4" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png">
+
+                                    <div class="media-body">
+                                        <div class="small-1">
+                                            <b> {{comment.user}}</b>
+                                            <time class="ml-4 opaciy-70 small-3"> {{comment.date}}</time>
+                                        </div>
+                                        <p> {{comment.content}}</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            
+                            <!--display the form-->
+                            <form method="POST" action="#">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    {{form}}
+                                </div> 
+                                <button class="btn btn-primary btn-block " type="submit">Comment</button>   
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
 		</section>
 		<section id="content2"><br>
 			<h3>Something Clever</h3>

@@ -6,7 +6,7 @@ from lmsmainapp.views import*
 urlpatterns = [
 
 path('login/', views.admin_login, name='login'),
-path('logout', views.admin_logout, name='logout'),
+path('logout/', views.admin_logout, name='logout'),
 
 path('home/', views.home_page,name="home"),
 

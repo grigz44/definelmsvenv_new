@@ -661,3 +661,12 @@ class commentview(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+
+from django.shortcuts import render
+from rest_framework import viewsets
+
+
+
+class EXamview(viewsets.ModelViewSet):
+    serializer_class = examSerializer
+    queryset = exam.objects.all()
