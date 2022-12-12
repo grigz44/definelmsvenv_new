@@ -28,10 +28,11 @@
     <link href="{% static 'userui/css/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-
+    <link href="{% static 'userui/css/style.css' %}" rel="stylesheet">
 </head>
 
 <body>
+
     <!-- Spinner Start -->
     <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
@@ -58,7 +59,7 @@
                     <div class="dropdown-menu fade-down m-0">
                         <a href="team.html" class="dropdown-item">Our Team</a>
                         <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                        <a href="#" class="dropdown-item active">404 Page</a>
+                        <a href="#" class="dropdown-item">404 Page</a>
                     </div>
                 </div>
                 <a href="{% url 'contact' %}" class="nav-item nav-link">Contact</a>
@@ -68,43 +69,26 @@
     </nav>
     <!-- Navbar End -->
 
-
-    <!-- Header Start -->
-    <div >
-      
-    </div>
-    <!-- Header End -->
-
-
     <!-- 404 Start -->
    
         
          
-      <div class="container1">
-      
+    <div class="container1">
         <div class="main-video-container">
-            
-            <iframe width="1060" height="550" name="iframe" src="{% static 'userui/gif/animation.gif' %}" loop controls class="main-video" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay;  encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            
-             <!-- 404 End -->
-   
-        </div>
-      
-         <div class="video-list-container active" oncli>
+            <iframe width="1060" name="iframe_a" height="550" src="{% static 'userui/gif/animation.gif' %}" loop controls class="main-video" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay;  encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>    
+        <div class="video-list-container">
             {% for vd in vde %}
-           
-            <input type="hidden" value="{{vd.class_name}}" id="classid"/>
-            <a href={{vd.videolink}}  target="iframe" class="nav-item nav-link">
-            <div class="list">
-            <img  src={{vd.image.url}} class="list-video"></img > 
-               <h3 class="list-title">{{vd.class_name}}</h3>
-            </div></a>
-       
-            
+            <a href="{{vd.videolink}}" class="nav-item nav-link" target="iframe_a">
+                <div class="list">
+                    <img src="{{vd.image.url}}" class="list-video">
+                    <h3 class="list-title">{{vd.class_name}}</h3>
+                </div>
+            </a>
             {% endfor %}
-         </div>
-      </div>
-     
+        </div>
+    </div>
+    <div></div>
       <!-- custom js file link  -->
       
       
@@ -118,50 +102,20 @@
 	<input id="radio3" type="radio" name="css-tabs">
 	<input id="radio4" type="radio" name="css-tabs">
 	<div id="tabs">
-		<label id="tab1" for="radio1">Comment</label>
+		<label id="tab1" for="radio1">Home</label>
 		<label id="tab2" for="radio2">Services</label>
 		<label id="tab3" for="radio3">Locations</label>
-		<label id="tab4" for="radio4">Profiles</label>
+		<label id="tab4" for="radio4">Profile</label>
 	</div>
 	<div id="content">
 		<section id="content1"><br>
-			<div class="section ">
-                <div class="container ">
-                    <h2>Comments({{post_comments_count}})</h2>
-                    <div class="row ">
-                        <div class="col-lg-8 mx-auto ">
-                            <!--display coment-->
-
-                            <div class="media-list">
-                                {% for comment in post_comments %}
-                                <div>
-                                    <img class="avatar avatar-sm mr-4" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png">
-
-                                    <div class="media-body">
-                                        <div class="small-1">
-                                            <b> {{comment.user}}</b>
-                                            <time class="ml-4 opaciy-70 small-3"> {{comment.date}}</time>
-                                        </div>
-                                        <p> {{comment.content}}</p>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-
-                            
-                            <!--display the form-->
-                            <form method="POST" action="#">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    {{form}}
-                                </div> 
-                                <button class="btn btn-primary btn-block " type="submit">Comment</button>   
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
+			<h3>Based on this Dribbble</h3>
+			<p>
+				<a href="https://dribbble.com/shots/509024-Tabbed-Menu">
+					https://dribbble.com/shots/509024-Tabbed-Menu
+				</a>
+			</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed facilisis adipiscing risus, porttitor viverra urna condimentum et. Donec vestibulum lacus vel dolor dictum pellentesque. Aliquam sodales sem quis urna condimentum, sit amet elementum magna semper.</p>
 		</section>
 		<section id="content2"><br>
 			<h3>Something Clever</h3>
@@ -180,16 +134,13 @@
 	</div>
     </div>
 
-    
-
-
     <!-- Footer Start -->
     {% include 'User_UI/footer.html' %}
     <!-- Footer End -->
     
 
     <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top" ><i class="bi bi-arrow-up"></i></a>
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 
 
     <!-- JavaScript Libraries -->
