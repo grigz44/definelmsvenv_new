@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'User',
     'corsheaders',
+    'rest_framework_simplejwt',
    
 ]
 
@@ -150,3 +151,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
 ]
+
+
+REST_FRAMEWORK = { 
+'DEFAULT_AUTHENTICATION_CLASSES': ( 
+ 'rest_framework_simplejwt.authentication.JWTAuthentication', 
+ ) 
+}
+
+from datetime import timedelta 
+SIMPLE_JWT = { 
+ 'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5), 
+ 'REFRESH_TOKEN_LIFETIME': timedelta(days=1), 
+ 'AUTH_HEADER_TYPES': ('Bearer',), 
+ }

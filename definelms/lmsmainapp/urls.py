@@ -7,9 +7,6 @@ from rest_framework.routers import DefaultRouter
 
 
 
-# router = DefaultRouter()
-# router.register(r'movies', views.EXamview, basename='movie')
-# urlpatterns = router.urls
 
 urlpatterns = [
 
@@ -63,11 +60,7 @@ urlpatterns = [
     path('commentclear/', api_views.commentview.as_view(), name="commentclear"),
     path('commentclear/<id>', api_views.commentview.as_view(), name="commentedit"),
     
-    # path('home/', views.home_page,name="home"),
-
-   
-    ######course#############
-
+  
 
 
     
