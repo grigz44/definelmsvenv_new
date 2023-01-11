@@ -111,5 +111,5 @@ class VideoclassSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model=comment
+        model=videocomment
         fields='__all__'

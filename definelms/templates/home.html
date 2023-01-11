@@ -2,25 +2,17 @@
 {% load static %}
 {% block title %} School Management System {% endblock %}
 {% block content %}
-<marquee behavior="alternate" direction="" scrollamount="8">Welcome To CUET APP </marquee>
+<marquee behavior="alternate" direction="" scrollamount="8">Welcome To CUET ADMIN PAGE </marquee>
 <div class="animated fadeIn">
     <div class="row">
         <div class="col-sm-6 col-lg-3">
             <div class="card text-white bg-primary">
 
                 <div class="card-body pb-0">
-                    <div class="btn-group float-right">
-                        <button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="icon-settings"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#">Student List</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </div>
-                    <div class="text-value"><a href="{% url 'cr' %}" class="btn btn-primary">{{ course }}</a></div>
-                    <div>Total course</div>
+                   
+                    <a href="{% url 'cr' %}" class="btn btn-transparent">
+                    <div class="text-value">{{ course }}</div>
+                    <div>Total course</div></a>
                 </div>
 
                 <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
@@ -48,18 +40,10 @@
         <div class="col-sm-6 col-lg-3">
             <div class="card text-white bg-danger">
                 <div class="card-body pb-0">
-                    <div class="btn-group float-right">
-                        <button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="icon-settings"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </div>
-                    <div class="text-value"><a href="{% url 'sub' %}" class="btn btn-transparent">{{ subject }}</a></div>
-                    <div>Total subject</div>
+                    
+                    <a href="{% url 'sub' %}" class="btn btn-transparent">
+                    <div class="text-value">{{ subject }}</div>
+                    <div>Total subject</div></a>
                 </div>
                 <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
                     <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
@@ -86,18 +70,10 @@
         <div class="col-sm-6 col-lg-3">
             <div class="card text-white bg-warning">
                 <div class="card-body pb-0">
-                    <div class="btn-group float-right">
-                        <button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="icon-settings"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </div>
-                    <div class="text-value"><a href="{% url 'add-examex' %}" class="btn btn-transparent">{{ exam }}</a></div>
-                    <div>Total Exam</div>
+                   
+                    <a href="{% url 'add-examex' %}" class="btn btn-transparent">
+                    <div class="text-value">{{ exam }}</div>
+                    <div>Total Exam</div></a>
                 </div>
                 <div class="chart-wrapper mt-3" style="height:70px;">
                     <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
@@ -116,18 +92,9 @@
         <div class="col-sm-6 col-lg-3">
             <div class="card text-white bg-danger">
                 <div class="card-body pb-0">
-                    <div class="btn-group float-right">
-                        <button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="icon-settings"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </div>
-                    <div class="text-value"><a href="{% url 'qbadd' %}" class="btn btn-transparent">{{ question }}</a></div>
-                    <div>Total question</div>
+                    <a href="{% url 'qbadd' %}" class="btn btn-transparent">
+                    <div class="text-value">{{ question }}</div>
+                    <div>Total question</div></a>
                 </div>
                 <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
                     <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">

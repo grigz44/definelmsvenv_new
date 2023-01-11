@@ -631,10 +631,10 @@ class VideoClassView(APIView):
 class commentview(APIView):
     def get(self,request,id=None):
         if id is not None:
-            subjects = comment.objects.get(id=id)
+            subjects = videocomment.objects.get(id=id)
             serializer = CommentSerializer(subjects)
             return Response(serializer.data) 
-        subjects = comment.objects.all()       
+        subjects = videocomment.objects.all()       
         serializer = CommentSerializer(subjects,many=True)
         return Response(serializer.data)
 
@@ -649,12 +649,12 @@ class commentview(APIView):
 
 
     def delete(self,req,id):
-        comment.objects.get(id=id).delete()
+        videocomment.objects.get(id=id).delete()
         return Response({"msg":1}) 
 
 
     def put(self,req,id):
-        subjects = comment.objects.filter(id=id).first()
+        subjects = videocomment.objects.filter(id=id).first()
         serializer = CommentSerializer(subjects,data=req.data)
         if serializer.is_valid():
             serializer.save()

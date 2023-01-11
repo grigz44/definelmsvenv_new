@@ -168,7 +168,7 @@ class videoform(forms.ModelForm):
 
 class CommentForm(forms.ModelForm):
     class Meta:
-        model = comment
+        model = videocomment
         fields = ['comment']
         widgets = {
             'comment': forms.TextInput(attrs={'class':'form-control', 'id':'commentid'}),
