@@ -12,6 +12,7 @@ from PIL import Image
 from rest_framework.parsers import MultiPartParser, FormParser
 from .forms import *
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
 
 
 class WebLogin(APIView):
@@ -146,45 +147,53 @@ class examView(APIView):
             return Response(serializer.errors)  
 
 
-#course
+# #course
 
-def addcourse(request):
-        """Process images uploaded by users"""
-        if request.method == 'POST':
-            form = courseform1(request.POST, request.FILES)
-            if form.is_valid():
-                form.save()
-                return render(request, 'course.html', {'form': form})
-                
-        else:
-            form = courseform1()
-        return render(request, 'course.html', {'form': form})
-
-# def add_course(request):
+# def addcourse(request):
+#         """Process images uploaded by users"""
 #         if request.method == 'POST':
 #             form = courseform1(request.POST, request.FILES)
 #             if form.is_valid():
 #                 form.save()
-#                 designation = course.objects.all()
-#                 context = {'form': form, 'st': designation}
-#                 return render(request, 'course/course.html',context)
+#                 return render(request, 'course.html', {'form': form})
                 
 #         else:
 #             form = courseform1()
-#         designation = course.objects.all()
-#         context = {'form': form, 'st': designation}
-#         return render(request, 'course/course.html', context)
+#         return render(request, 'course.html', {'form': form})
+
+# # def add_course(request):
+# #         if request.method == 'POST':
+# #             form = courseform1(request.POST, request.FILES)
+# #             if form.is_valid():
+# #                 form.save()
+# #                 designation = course.objects.all()
+# #                 context = {'form': form, 'st': designation}
+# #                 return render(request, 'course/course.html',context)
+                
+# #         else:
+# #             form = courseform1()
+# #         designation = course.objects.all()
+# #         context = {'form': form, 'st': designation}
+# #         return render(request, 'course/course.html', context)
 
 class courseView(APIView):
 
+
+
     def get(self,request,id=None):
         if id is not None:
-            courses = course.objects.get(id=id)
-            serializer = courseSerializer(courses)
+            exam1      = course.objects.get(id=id)
+            serializer = courseSerializer(exam1)
             return Response(serializer.data) 
-        courses = course.objects.all()       
-        serializer = courseSerializer(courses,many=True)
+        exam1      = course.objects.all()       
+        serializer = courseSerializer(exam1,many=True)
         return Response(serializer.data)
+
+    # def get(self, request,id):
+
+    #     mcq        = course.objects.filter(exam=id)
+    #     serializer = courseSerializer(mcq, many=True)
+    #     return Response(serializer.data)
 
     #parser_classes = (MultiPartParser, FormParser, )
     def post(self,req, *args, **kwarg):
@@ -213,18 +222,18 @@ class courseView(APIView):
 
 
 #subject adding
-def addsubject(request):
-        """Process images uploaded by users"""
-        if request.method == 'POST':
-            form = subjectForm(request.POST, request.FILES)
-            if form.is_valid():
-                form.save()
-                # Get the current instance object to display in the template
-                img_obj = form.instance
-                return render(request, 'subject.html', {'form': form})
-        else:
-            form = subjectForm()
-        return render(request, 'subject.html', {'form': form})
+# def addsubject(request):
+#         """Process images uploaded by users"""
+#         if request.method == 'POST':
+#             form = subjectForm(request.POST, request.FILES)
+#             if form.is_valid():
+#                 form.save()
+#                 # Get the current instance object to display in the template
+#                 img_obj = form.instance
+#                 return render(request, 'subject.html', {'form': form})
+#         else:
+#             form = subjectForm()
+#         return render(request, 'subject.html', {'form': form})
 
 
 #SERIALIZERS FOR SUBJECT OPERATION
@@ -430,19 +439,47 @@ class exammasterView(APIView):
         exam_master.objects.get(id=id).delete()
         return Response("successfully deleted")
 
+
 # API to list the available tests...
 
 class masterView(APIView):
 
-    def post(self,request):
-        sub_id=request.data['subject']
-        tpc_id=request.data['topic']
-        date  =request.data['date']
+    def get(self, request,id):
 
-        print(request)
-        master1      = exam_master.objects.filter(exam_criteria__subject=sub_id,exam_criteria__topic=tpc_id , exam_start_date__lte=date, exam_end_date__gte=date)
-        serializer   = exam_masterSerializer(master1,many=True)
-        return Response(serializer.data)  
+        mcq        = exam_master.objects.filter(course=id)
+        serializer = exam_masterSerializer(mcq, many=True)
+        return Response(serializer.data)
+
+    # def post(self,request):
+    #     sub_id=request.data['subject']
+    #     tpc_id=request.data['topic']
+    #     date  =request.data['date']
+
+    #     print(request)
+    #     master1      = exam_master.objects.filter(exam_criteria__subject=sub_id,exam_criteria__topic=tpc_id , exam_start_date__lte=date, exam_end_date__gte=date)
+    #     serializer   = exam_masterSerializer(master1,many=True)
+    #     return Response(serializer.data)  
+
+
+class courseview(APIView):
+
+    def post(self,request):
+        exm=request.data['exam']
+        course1=course.objects.filter(exam=exm)
+        serializer=courseSerializer(course1,many=True)
+        return Response(serializer.data)
+
+
+
+class isdemanded(APIView):
+
+    def get(self, request):
+
+        mcq        = course.objects.filter(isdemanded=1)
+        serializer = courseSerializer(mcq, many=True)
+        return Response(serializer.data)
+
+
 
 class examQuestionAllocationView(APIView):
 
@@ -538,10 +575,16 @@ class Particularmcq(APIView):
 
 class GetQuestions(APIView):
     def get(self, request,id):
-        data = exam_question_allocation.objects.filter(exam_master = id)
-        serializer = examdetailsSerializer(data, many=True)
-        return Response(serializer.data)
-
+        
+        exam_questions = []
+        
+        for exam_question in exam_question_allocation.objects.filter(exam_master=id):
+            serializer = examQuestionallocationSerializer(exam_question)
+            print(serializer.data.get('question', None))
+            questions = question_bank.objects.filter(id=serializer.data.get('question', None))
+            serializer = questionSerializer(questions, many=True)
+            exam_questions.append(serializer.data[0])
+        return Response(exam_questions)
 
 
 
@@ -667,6 +710,226 @@ from rest_framework import viewsets
 
 
 
-class EXamview(viewsets.ModelViewSet):
+class Examview(viewsets.ModelViewSet):
     serializer_class = examSerializer
     queryset = exam.objects.all()
+
+
+
+#course subject allocation api
+
+class courseSubjectAllocationView(APIView):
+
+    def get(self,request,id=None):
+
+        if id is not None:
+            exam1      = course_subject_allocation.objects.get(id=id)
+            serializer = courseSubjectallocationSerializer(exam1)
+            return Response(serializer.data) 
+        exam1      = course_subject_allocation.objects.all()       
+        serializer = courseSubjectallocationSerializer(exam1,many=True)
+        return Response(serializer.data)
+
+
+    def post(self,req):
+
+        serializer = courseSubjectallocationSerializer(data=req.data)
+        print(serializer)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+
+    def delete(self,req,id):
+
+        course_subject_allocation.objects.get(id=id).delete()
+        return Response({"msg":1}) 
+
+
+    def put(self,req,id):
+
+        exam1      = course_subject_allocation.objects.filter(id=id).first()
+        serializer = courseSubjectallocationSerializer(exam1,data=req.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+
+
+    #TOPIC COURSE ALLOCATION
+
+class topicCourseAllocationView(APIView):
+
+    def get(self,request,id=None):
+        if id is not None:
+            exam1      = topic_course_allocation.objects.get(id=id)
+            serializer = topicCourseAllocationSerializer(exam1)
+            return Response(serializer.data) 
+        exam1      = topic_course_allocation.objects.all()       
+        serializer = topicCourseAllocationSerializer(exam1,many=True)
+        return Response(serializer.data)
+
+
+    def post(self,req):
+        serializer = topicCourseAllocationSerializer(data=req.data)
+        print(serializer)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+
+    def delete(self,req,id):
+        topic_course_allocation.objects.get(id=id).delete()
+        return Response({"msg":1}) 
+
+
+    def put(self,req,id):
+        exam1      = topic_course_allocation.objects.filter(id=id).first()
+        serializer = topicCourseAllocationSerializer(exam1,data=req.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+
+
+
+
+class bannerView(APIView):
+
+    def get(self,request,id=None):
+
+        if id is not None:
+            banners = banner.objects.get(id=id)
+            serializer = BannerSerializer(banners)
+            return Response(serializer.data) 
+        banners = banner.objects.all()       
+        serializer = BannerSerializer(banners,many=True)
+        return Response(serializer.data)
+
+    #parser_classes = (MultiPartParser, FormParser, )
+    def post(self,req, *args, **kwarg):
+
+        print(req.data)
+        serializer = BannerSerializer(data=req.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+
+    def delete(self,req,id):
+
+        banner.objects.get(id=id).delete()
+        return Response({"msg":1}) 
+
+
+    def put(self,req,id):
+
+        courses = banner.objects.filter(id=id).first()
+        serializer = BannerSerializer(courses,data=req.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+
+
+
+
+class GetResultView(APIView):
+
+    def get(self, request):
+        
+        data = examresult.objects.all()
+        serializer = ExamrstSerializer(data, many=True)
+        return Response(serializer.data)
+
+
+    def post(self,req):
+        
+        serializer = ExamrstSerializer(data=req.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=201)
+        return Response(serializer.errors,status=404)
+
+
+
+
+
+class SyllabusView(APIView):
+
+    def get(self,request,id=None):
+
+        if id is not None:
+            subjects = syllabus.objects.get(id=id)
+            serializer = SyllabusSerializer(subjects)
+            return Response(serializer.data) 
+        subjects = syllabus.objects.all()       
+        serializer = SyllabusSerializer(subjects,many=True)
+        return Response(serializer.data)
+
+
+    def post(self,req):
+
+        serializer = SyllabusSerializer(data=req.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)  
+
+
+    def delete(self,req,id):
+
+        syllabus.objects.get(id=id).delete()
+        return Response({"msg":1}) 
+
+
+    def put(self,req,id):
+        
+        subjects = syllabus.objects.filter(id=id).first()
+        serializer = SyllabusSerializer(subjects,data=req.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+
+
+
+class notesView(APIView):
+
+    def get(self,request,id=None):
+
+        if id is not None:
+            subjects = notes.objects.get(id=id)
+            serializer = NotesSerializer(subjects)
+            return Response(serializer.data) 
+        subjects = notes.objects.all()       
+        serializer = NotesSerializer(subjects,many=True)
+        return Response(serializer.data)
+    def delete(self,req,id):
+
+        notes.objects.get(id=id).delete()
+        return Response({"msg":1})
+
+
+class perfomance(APIView):
+
+    def get(self, request,id):
+        mcq        = examresult.objects.filter(user=id)
+
+        serializer = ExamrstSerializer(mcq, many=True)
+        return Response(serializer.data)

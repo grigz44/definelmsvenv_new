@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
 from lmsmainapp.views import*
 
@@ -61,7 +61,7 @@ path('questionbankdelete/', views.delete_data_question, name='deleteqb'),
 # path('editt/', views.edit_data_topic, name='edittp'),
 
 ##############exammaster########################
-path('em/', views.addexmaster, name='homeem'),
+path('emaster/', views.addexmaster, name='homeem'),
 path('deleteem/', views.delete_data_exmaster, name='deleteem'),
 path('editst/', views.edit_data_exmaster,name='editst'),
 
@@ -76,5 +76,38 @@ path('editop/', views.edit_data_addoptions,name='editop'),
 path('video/', views.addvideo, name='vdo'),
 path('deletevdo/', views.deletevideo, name='deletevdo'),
 # path('editop/', views.edit_data_addoptions,name='editop'),
+
+path('addbanner/', views.addbanner,name="addbanner"),
+path('deleteba/', views.delete_data_banner, name='deleteba'),
+
+
+#add course subject allocation
+
+path('addcsallo/', views.addcsallo,name="addcsallo"),
+path('deletecs/', views.delete_data_csallo, name='deletecs'),
+
+
+#add course subject topic allocation
+
+path('addtcallo/', views.addtcallo,name="addtcallo"),
+path('deletetc/', views.delete_data_tcallo, name='deletetc'),
+
+#add Examamster question allocation
+
+path('addeqallo/', views.addeqallo,name="addeqallo"),
+path('deleteeq/', views.delete_data_eqallo, name='deleteeq'),
+
+
+
+path('addnotes/', views.addnotes,name="addnote"),
+path('deletenotes/', views.delete_data_notes, name='deleteno'),
+
+
+
+#add syllabus
+
+path('addsyllabus/', views.addsyllabus,name="addsyllabus"),
+path('deletesy/', views.delete_data_syllabus, name='deletesy'),
+
 
 ]

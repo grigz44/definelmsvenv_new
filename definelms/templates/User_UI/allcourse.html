@@ -55,14 +55,14 @@
                 <a href="{% url 'index' %}" class="nav-item nav-link">Home</a>
                 <a href="{% url 'about' %}" class="nav-item nav-link ">About</a>
                 <a href="{% url 'vexam' %}" class="nav-item nav-link ">EXAMS</a>
-                <div class="nav-item dropdown">
+                <!-- <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                     <div class="dropdown-menu fade-down m-0">
                         <a href="team.html" class="dropdown-item">Our Team</a>
                         <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                        <a href="404.html" class="dropdown-item">404 Page</a>
+                        <a href="{% url '404' %}" class="dropdown-item">404 Page</a>
                     </div>
-                </div>
+                </div> -->
                 <a href="{% url 'contact' %}" class="nav-item nav-link">Contact</a>
             </div>
             <a href="" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Join Now<i class="fa fa-arrow-right ms-3"></i></a>
@@ -107,15 +107,18 @@
                 {% for st in exm %}
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="course-item bg-light">
-                        <a href="{% url 'vclass' st.id %}">
+                        <a href="{% url 'coursedesc' st.id %}">
                         <div class="position-relative overflow-hidden">
                             <img class="img-fluid" src="{{st.image.url}}" alt="">
                         </div>
                         <div class="text-center p-4 pb-0">
                             <h3 class="mb-0">{{st.course_name}}</h3>
-                            <h5 class="mb-4"></h5>
-                            <div class="mb-3">
-                                <font color="black"> <small>{{st.description}}</small></font>
+                            <div class="border-top mt-4 pt-4">
+                            <div class="d-flex justify-content-between">                        
+                                <small class="m-0"><i class="far fa-clock text-primary mr-2"></i>&nbsp;{{st.duration}}</small>
+                                <h6 class="m-0 colo1">₹&nbsp;{{st.amount}}</h6>
+                                  
+                              </div>
                             </div>
                             
                         </div>

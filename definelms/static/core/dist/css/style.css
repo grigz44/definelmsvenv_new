@@ -7384,7 +7384,9 @@ button {
 .card {
   margin-bottom: 1.5rem; }
   .card.bg-primary {
-    border-color: #187da0; }
+    border-color: #187da0;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  }
     .card.bg-primary .card-header {
       background-color: #1e9ecb;
       border-color: #187da0; }
@@ -7404,12 +7406,14 @@ button {
       background-color: #56bddb;
       border-color: #2eadd3; }
   .card.bg-warning {
-    border-color: #c69500; }
+    border-color: #c69500;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0,0,0,0.19); }
     .card.bg-warning .card-header {
       background-color: #f7b900;
       border-color: #c69500; }
   .card.bg-danger {
-    border-color: #f5302e; }
+    border-color: #f5302e;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0,0,0,0.19); }
     .card.bg-danger .card-header {
       background-color: #f75d5c;
       border-color: #f5302e; }
@@ -7841,8 +7845,8 @@ base-chart.chart {
   border-bottom: 1px solid #c2cfd6; }
   .app-header.navbar .navbar-brand {
     display: inline-block;
-    width: 155px;
-    height: 55px;
+    width: 80px;
+    height: 27.6px;
     padding: 0.5rem 1rem;
     margin-right: 0;
     background-color: #fff;
@@ -7850,7 +7854,8 @@ base-chart.chart {
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 70px auto;
-    border-bottom: 1px solid #c2cfd6; }
+    border-bottom: 1px solid #c2cfd6;
+    zoom: 200%; }
   .app-header.navbar .navbar-toggler {
     min-width: 50px;
     padding: 0.25rem 0; }
@@ -7875,7 +7880,8 @@ base-chart.chart {
       padding-top: 0;
       padding-bottom: 0;
       background: 0;
-      border: 0; }
+      border: 0; 
+      padding: 0 0.75rem;}
       .app-header.navbar .nav-item .nav-link .badge, .app-header.navbar .nav-item .dropdown-toggle .badge {
         position: absolute;
         top: 50%;
@@ -7936,11 +7942,15 @@ base-chart.chart {
 
 @media (min-width: 992px) {
   .brand-minimized .app-header.navbar .navbar-brand {
-    width: 50px;
     background-color: #fff;
-    background-image: url("../img/logo-symbol.png");
-    background-size: 24px;
-    border-bottom: 1px solid #c2cfd6; } }
+    background-image: url("../img/logoc.png");
+    background-size: 54px;
+    border-bottom: 1px solid #c2cfd6;
+    width: 40px;
+    height: 68px;
+    zoom: 80%;
+    padding-right: 50px;
+   } }
 
 .progress-xs {
   height: 4px; }
@@ -9458,3 +9468,11 @@ hr.transparent {
       float: left; }
   *[dir="rtl"] .callout-default {
     border-right-color: #536c79; }
+
+
+
+
+
+    .img-flu {
+      max-width: 10%;
+      height: 10%; }

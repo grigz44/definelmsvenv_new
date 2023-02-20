@@ -2,32 +2,97 @@ from django.shortcuts import render,redirect
 from requests import post
 from lmsmainapp.forms import *
 from lmsmainapp.models import *
+from django.contrib.auth import logout
+
+
 
 
 ############### login #################
 
-def login(request):
+# def login(request):
 
-    return render(request, 'User_UI/login.html')
-  
+#     return render(request, 'User_UI/login.html')
+
+def user_login(request):
+
+   
+	msg=''
+   
+	if request.method=='POST':
+        
+       
+		username=request.POST['username']
+		password=request.POST['password']
+		user=login.objects.filter(username=username,password=password,role=2).count()
+        
+		if user > 0:
+            
+			user=login.objects.filter(username=username,password=password,role=2).first()
+			request.session['userid'] = user.id
+			print(request.session['userid'])
+            
+			return redirect('index')
+            
+
+		else:
+			msg='Invalid!!'
+            
+	form=UserLoginForm
+	return render(request, 'User_UI/login.html',{'form':form,'msg':msg})
+
+
+
+
+
+def user_logut(request):
+        logout(request)
+        return redirect('loginu')
+
+
 #################### home ###############
 def temp(request):
+    if 'userid' not in request.session:
+        return redirect('loginu')
+    else:
+        un=request.session['userid']   
+        user=login.objects.filter(id=un).values
+        context={
+            'username':user
+        }
 
-    return render(request, 'User_UI/index.html')
+        return render(request, 'User_UI/index.html',context)
 
 def about(request):
+    if 'userid' not in request.session:
+        return redirect('loginu')
+    else:
 
-    return render(request, 'User_UI/about.html')
+        return render(request, 'User_UI/about.html')
+
+
+
+def coursereg(request):
+    if 'userid' not in request.session:
+        return redirect('loginu')
+    else:
+
+        return render(request, 'User_UI/coursereg.html')
 
 
 def contact(request):
+    if 'userid' not in request.session:
+        return redirect('loginu')
+    else:
 
-    return render(request, 'User_UI/contact.html')
+        return render(request, 'User_UI/contact.html')
 
 ############### all exam ###################
 
 
 def vexam(request):
+    if 'userid' not in request.session:
+        return redirect('loginu')
+    else:
         exm = exam.objects.all()
         context = {'exm':exm}
         return render(request, 'User_UI/viewallexam.html', context)
@@ -37,6 +102,9 @@ def vexam(request):
 
 
 def vcourse(request,id):
+    if 'userid' not in request.session:
+        return redirect('loginu')
+    else:
 
         exm = course.objects.filter(exam=id)
       
@@ -50,98 +118,83 @@ def vcourse(request,id):
 ################### video tutorials #########################
 
 def error404(request):
+    if 'userid' not in request.session:
+        return redirect('loginu')
+    else:
 
-    return render(request, 'User_UI/404.html')
+        return render(request, 'User_UI/404.html')
 
 
 ################ video class ############################
-
-
-
-def vclass(request,id):
-
-        st = video_class.objects.filter(course=id)
-      
-        context = {
-            'vde':st
-        }
-        return render(request, 'User_UI/tutorials.html',context)
-
 
 from django.shortcuts import render, get_object_or_404
 
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, JsonResponse
 
-
-
-def home(request):
-    if 'username' not in request.session:
-        return redirect('login')
+def vclass(request,id):
+    if 'userid' not in request.session:
+        return redirect('loginu')
     else:
-    
+
+        st = video_class.objects.filter(course=id)
         form = CommentForm()
-        dsn = videocomment.objects.all()
-        
-        context = {'form':form, 'dsn':dsn}
-        return render(request, 'User_UI/comment.html', context)
+        com = videocomment.objects.all().values
+        un=request.session['userid']   
+        user=login.objects.filter(id=un).values
+        pdf=notes.objects.all()
+        syl=syllabus.objects.filter(id=3)
+        context = {
+            'vde':st,
+            'form':form,
+            'com':com,
+            'userid':un,
+            'username':user,
+            'pdf':pdf,
+            'syl':syl
+            }
+
+        return render(request, 'User_UI/tutorials.html',context)
 
 
-@csrf_exempt
-def save_data(request):
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            cid = request.POST.get('dsnid')
-            designation1 = request.POST['comment']
-            designation1 = request.POST['comment']
-            print('student id',cid)
-
-            if(cid == ''):
-                d = videocomment(comment=designation1)
-            else:
-                d = videocomment(id=cid, comment=designation1)
-            d.save()
-
-            dsn = videocomment.objects.values()
-            student_data = list(dsn)
-            return JsonResponse({'status':'Data Saved', 'student_data':student_data})
-        else:
-            return JsonResponse({'status':'Not Saved'})    
-
-@csrf_exempt
-def delete_data(request):
-    if request.method == 'POST':
-        id = request.POST.get('did')
-        d = videocomment.objects.get(pk=id)
-        d.delete()
-        return JsonResponse({'status':1})
-    else:
-        return JsonResponse({'status':0})    
 
 
-@csrf_exempt
-def edit_data(request):
-    if request.method == 'POST':
-        id = request.POST.get('did')
-        print('Student ID',id)
-        desgn = videocomment.objects.get(pk=id)
-        student_data = {'id':desgn.id, 'comment':desgn.comment}
-        return JsonResponse(student_data)
 
 
 
 
 ###################### comment ############################
 
-def add_comment(request):
-    if request.method == 'GET':
-        video_id = request.GET['video_id']
-        comment = request.GET['comment_text']
-        video_obj = video_class.objects.get(id=video_id)
-        session_obj = login.objects.get(username=request.user.username)
-        video_comments = videocomment.objects.filter(post=video_obj).order_by('-id')
-        create_comment = videocomment.objects.create(post=video_obj, user=session_obj, comment=comment)
-        create_comment.save()
 
-    return JsonResponse({'comment':create_comment.comment, 'count_comments':video_comments.count()})
+
+
+
+def video(request):
+    if 'userid' not in request.session:
+        return redirect('loginu')
+    else:
+
+        st = video_class.objects.all()
+        
+        context = {
+            'vde':st
+        }
+        return render(request, 'User_UI/video.html',context)         
+
+
+
+
+
+
+
+def coursedesc(request,id):
+    if 'userid' not in request.session:
+        return redirect('loginu')
+    else:
+        designation = course.objects.filter(id=id)
+        coun = course_registration.objects.filter(course=id).count()
+        context = {
+            'c':coun,
+            'st': designation,
+            }
+        return render(request, 'User_UI/coursereg.html',context)

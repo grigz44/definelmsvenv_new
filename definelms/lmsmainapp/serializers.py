@@ -91,13 +91,15 @@ class questionSerializer(serializers.ModelSerializer):
     class Meta: 
         model = question_bank
         fields = ['id','question','no_of_options','options']
+        depth  = 1
         
                
 class examdetailsSerializer(serializers.ModelSerializer):
+    options = optSerializer(many=True, read_only=True)
     question1 = questionSerializer(many=True,read_only=True)
     class Meta: 
         model = exam_question_allocation
-        fields = ['id','question','question1']
+        fields = ['id','question','question1','options']
         depth  = 1
 
 
@@ -112,4 +114,56 @@ class VideoclassSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model=videocomment
+        fields='__all__'
+
+
+
+class courseSubjectallocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=course_subject_allocation
+        fields='__all__'
+
+class topicCourseAllocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=topic
+        fields='__all__'
+
+
+
+class BannerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=banner
+        fields='__all__'
+
+
+class DetailsresultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=result_details
+        fields = ['id','question','attempted_time','is_flagged','user_answer','correct_answer','options_switched','switched_wrong_correct','switched_correct_wrong']
+
+class ExamrstSerializer(serializers.ModelSerializer):
+    attent = DetailsresultSerializer(many=True)
+    class Meta:
+        model=examresult
+        fields = ['id','user','exam','datetime','total_correct','total_wrong','total_skipped','flagged_correct','flagged_attempt','final_score','attent']
+    def create(self, validated_data):
+        exam_data = validated_data.pop('attent')
+        results = examresult.objects.create(**validated_data)
+        for exam_data in exam_data:
+            result_details.objects.create(examresult=results, **exam_data)
+        return results
+
+
+
+
+class SyllabusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=syllabus
+        fields='__all__'
+
+
+
+class NotesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=notes
         fields='__all__'

@@ -14,6 +14,9 @@ class login(models.Model):
     class Meta:
         db_table = 'login'
 
+    def __str__(self):
+        return self.username
+
 class registration(models.Model):
     
     name       = models.CharField(max_length=50,default="",null=True)
@@ -27,6 +30,9 @@ class registration(models.Model):
     class Meta:
         db_table='registration'
 
+    def __str__(self):
+        return self.name
+
 class exam(models.Model):
     id          = models.AutoField(primary_key=True)
     exam_name   = models.CharField(max_length=200)
@@ -36,18 +42,25 @@ class exam(models.Model):
     class Meta:
         db_table = 'exam'
 
+    def __str__(self):
+        return self.exam_name
+
 class course(models.Model):
     id          = models.AutoField(primary_key=True)
     course_name = models.CharField(max_length=20,default="")
-    description = models.CharField(max_length=100,default="")
+    description = models.CharField(max_length=1000,default="")
     amount      = models.IntegerField(default=0)
     duration    = models.CharField(max_length=10,default="")
     exam        = models.ForeignKey(exam,on_delete=models.CASCADE)
     image       = models.ImageField(upload_to='course')
+    isdemanded  =models.BooleanField(default=False,blank=True)
     user        = models.ForeignKey(login,on_delete=models.CASCADE)
 
     class Meta:
         db_table='course'
+
+    def __str__(self):
+        return self.course_name
 
 class subject(models.Model):
     id           = models.AutoField(primary_key=True)
@@ -59,13 +72,18 @@ class subject(models.Model):
     class Meta:
         db_table='subject'
 
+    def __str__(self):
+        return self.subject_name
+    
+
 class course_subject_allocation(models.Model):
-    id           = models.AutoField(primary_key=True)
+    id        = models.AutoField(primary_key=True)
     course    = models.ForeignKey(course,on_delete=models.CASCADE)
     subject   = models.ForeignKey(subject,on_delete=models.CASCADE)
 
     class Meta:
         db_table='course_subject_allocation'
+
 
 
 class topic(models.Model):
@@ -77,6 +95,9 @@ class topic(models.Model):
 
     class Meta:
         db_table='topic'
+
+    def __str__(self):
+        return self.topic_name
 
 class topic_course_allocation(models.Model):
     id          = models.AutoField(primary_key=True)
@@ -97,6 +118,9 @@ class Subtopics(models.Model):
 
     class Meta:
         db_table = 'Subtopics'
+
+    def __str__(self):
+        return self.name
 
 
 # class course_info(models.Model):
@@ -171,15 +195,18 @@ class question_bank(models.Model):
     created_date    = models.DateField(auto_now_add=True)
     last_updated_date= models.DateField(auto_now=True)
     user            = models.ForeignKey(login,on_delete=models.CASCADE)
-    status          = models.CharField(max_length=50,default="")
-    remark          = models.CharField(max_length=50,default="")
+    status          = models.BooleanField(default=False)
+    remark          = models.CharField(max_length=50,blank=True)
     is_reported     = models.BooleanField(default=False)
     report_reason   = models.CharField(max_length=1000,default="")
     correct_answer  = models.CharField(max_length=1,null=False)
-    option          = models.CharField(max_length=5000,default="")
+    
 
     class Meta:
         db_table='question_bank'
+
+    def __str__(self):
+        return self.question
 
 class question_bank_options(models.Model):
     id               = models.AutoField(primary_key=True)
@@ -190,23 +217,28 @@ class question_bank_options(models.Model):
     class Meta:
         db_table='question_bank_options'
 
+
 class exam_master(models.Model):
     id               = models.AutoField(primary_key=True)
     name             = models.CharField(max_length=250,default="")
     exam             = models.ForeignKey(exam,on_delete=models.CASCADE)
     course           = models.ForeignKey(course,on_delete=models.CASCADE)
     no_of_questions  = models.IntegerField(default=0)
-    total_time       = models.TimeField()
+    total_time       = models.IntegerField(default=0)
     no_of_attempt    = models.IntegerField(default=0)
     datetime         = models.DateTimeField(auto_now_add=True)
     exam_start_date  = models.DateField()
     exam_end_date    = models.DateField()
+    image            = models.ImageField(upload_to='exammaster',default="")
     exam_description = models.CharField(max_length=500,default="")
     is_draft         = models.BooleanField(default=False)
     user             = models.ForeignKey(login,on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'exam_master'
+
+    def __str__(self):
+        return self.name
 
 class exam_question_allocation(models.Model):
     id               = models.AutoField(primary_key=True)
@@ -257,12 +289,88 @@ class video_class(models.Model):
     class Meta:
         db_table='video_class'
 
+    def __str__(self):
+        return self.class_name
+
+
 
 class videocomment(models.Model):
     id               = models.AutoField(primary_key=True)
     video            = models.ForeignKey(video_class,on_delete=models.CASCADE)
-    user             = models.ForeignKey(login,on_delete=models.CASCADE)
+    user             = models.ForeignKey(login,on_delete=models.CASCADE,null=True)
     datetime         = models.DateTimeField(auto_now_add=True)
     comment          = models.CharField(max_length=5000,default="")
     class Meta:
         db_table='videocomment'
+
+
+class banner(models.Model):
+    id               = models.AutoField(primary_key=True)
+    banner           = models.ImageField(upload_to='banner')
+    class Meta:
+        db_table='banner'
+
+
+
+class examresult(models.Model):
+    id               = models.AutoField(primary_key=True)
+    user             = models.ForeignKey(login,on_delete=models.CASCADE)
+    exam             = models.ForeignKey(exam_master,on_delete=models.CASCADE)
+    datetime         = models.DateTimeField(auto_now_add=True)
+    total_correct    = models.IntegerField(default=0)
+    total_wrong      = models.IntegerField(default=0)
+    total_skipped    = models.IntegerField(default=0)
+    flagged_correct  = models.IntegerField(default=0)
+    flagged_attempt  = models.IntegerField(default=0)
+    switched_wrong_correct    = models.IntegerField(default=0)
+    switched_correct_wrong    = models.IntegerField(default=0)
+    final_score    = models.FloatField(default=0)
+   
+
+   
+
+
+    class Meta:
+        db_table='examresult'
+
+
+class result_details(models.Model):
+    id               = models.AutoField(primary_key=True)
+    question         = models.ForeignKey(question_bank,on_delete=models.CASCADE)
+    examresult       = models.ForeignKey(examresult,related_name="attent",on_delete=models.CASCADE)
+    attempted_time   = models.TimeField()
+    is_flagged       = models.BooleanField(default=False)
+    user_answer      = models.CharField(max_length=1,null=False)
+    correct_answer   = models.CharField(max_length=1,null=True)
+    switched_wrong_correct    = models.IntegerField(default=0)
+    switched_correct_wrong    = models.IntegerField(default=0)
+    options_switched = models.IntegerField(default=0)
+
+    class Meta:
+        db_table='result_details'
+
+
+
+class notes(models.Model):
+    id          = models.AutoField(primary_key=True)
+    notename    = models.CharField(max_length=100,default="")
+    pdf_file    = models.FileField(upload_to='pdf',default="")
+    subject     = models.ForeignKey(subject,on_delete=models.CASCADE)
+    video       = models.ForeignKey(video_class,on_delete=models.CASCADE)
+    isactive    = models.BooleanField(default=False)
+    user        = models.ForeignKey(login,on_delete=models.CASCADE)
+
+    class Meta:
+        db_table='notes'
+
+    
+
+class syllabus(models.Model):
+    id               = models.AutoField(primary_key=True)
+    course           = models.ForeignKey(course,on_delete=models.CASCADE)
+    syllabus         = models.TextField()
+    isactive         = models.BooleanField(default=False)
+    user        = models.ForeignKey(login,on_delete=models.CASCADE)
+
+    class Meta:
+        db_table='syllabus'

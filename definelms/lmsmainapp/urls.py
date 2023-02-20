@@ -11,7 +11,7 @@ from rest_framework.routers import DefaultRouter
 urlpatterns = [
 
     path('login1/', api_views.loginView.as_view(), name="login1"),
-    path('login1/<id>', api_views.topicView.as_view(), name="login_put_dlt"),
+    path('login1/<id>', api_views.loginView.as_view(), name="login_put_dlt"),
 
     path('registration/', api_views.registrationView.as_view(), name="registration"),
     path('registration/<id>', api_views.registrationView.as_view(), name="registration_put_dlt"),
@@ -19,13 +19,15 @@ urlpatterns = [
     path('exam/', api_views.examView.as_view(), name="exam"),
     path('exam/<id>', api_views.examView.as_view(), name="exam_put_dlt"),
 
-    path('course/', api_views.courseView.as_view(), name="course"),
+    path('courseall/', api_views.courseView.as_view(), name="course"),
     path('course/<id>', api_views.courseView.as_view(), name="course_put_dlt"),
-    path('addcourse/', views.addcourse),
+    path('course/', api_views.courseview.as_view(), name="course"),
+    path('demandedcourse/', api_views.isdemanded.as_view(), name="demandedcourse"),
+    
  
     path('subject/', api_views.subjectView.as_view(), name="subject"),
     path('subject/<id>', api_views.subjectView.as_view(), name="subject_put_dlt"),
-    path('addsubject/', views.addsubject),
+   
 
     path('topic/', api_views.topicView.as_view(), name="topic"),
     path('topic/<id>', api_views.topicView.as_view(), name="topic_put_dlt"),
@@ -36,7 +38,7 @@ urlpatterns = [
     
     path('exammaster/', api_views.exammasterView.as_view(), name="exam_master"),
     path('exammaster/<id>', api_views.exammasterView.as_view(), name="exam_master_put_dlt"),
-
+    path('masterview/<id>', api_views.masterView.as_view(), name="master_view"),
     path('masterview/', api_views.masterView.as_view(), name="master_view"),
 
     path('eqallocation/', api_views.examQuestionAllocationView.as_view(), name="exam_question_allocation"),
@@ -50,18 +52,45 @@ urlpatterns = [
     path('questionoption/<id>', api_views.questionbankoptionsview.as_view(), name="exam_put_dlt"),
     
     
-    path('mcq/', api_views.mcqView.as_view(), name="subtopic"),
-    path('mcq/<id>', api_views.GetQuestions.as_view(), name="subtopic"),
+    path('mcq/', api_views.mcqView.as_view(), name="mcq"),
+    path('mcq/<id>', api_views.GetQuestions.as_view(), name="mcq"),
 
 
     path('videoapi/', api_views.VideoClassView.as_view(), name="vdoapi"),
 
 
-    path('commentclear/', api_views.commentview.as_view(), name="commentclear"),
-    path('commentclear/<id>', api_views.commentview.as_view(), name="commentedit"),
+    path('comment/', api_views.commentview.as_view(), name="commentclear"),
+    path('comment/<id>', api_views.commentview.as_view(), name="commentedit"),
+
+
+    path('csallocation/', api_views.courseSubjectAllocationView.as_view(), name="course_subject_allocation"),
+    path('csallocation/<id>', api_views.courseSubjectAllocationView.as_view(), name="course_subject_put_dlt"),
     
   
+    path('tcallocation/', api_views.topicCourseAllocationView.as_view(), name="topic_question_allocation"),
+    path('tcallocation/<id>', api_views.topicCourseAllocationView.as_view(), name="topic_question_allocation_put_delete"),
 
+
+    path('banner/', api_views.bannerView.as_view(), name="banner"),
+    path('banner/<id>', api_views.bannerView.as_view(), name="banner_put_dlt"),
+
+    path('examresult/', api_views.GetResultView.as_view(), name="result"),
+
+
+    path('syllabus/', api_views.SyllabusView.as_view(), name="syllabus"),
+    path('syllabus/<id>', api_views.SyllabusView.as_view(), name="syllabus_put_dlt"),
+
+
+
+    path('notes/', api_views.notesView.as_view(), name="notes"),
+    path('notes/<id>', api_views.notesView.as_view(), name="notes_put_dlt"),
+
+
+
+
+    path('perfomance/<id>', api_views.perfomance.as_view(), name="perfomance"),
+
+    
 
     
 ]
