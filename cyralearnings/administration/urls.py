@@ -110,4 +110,19 @@ path('addsyllabus/', views.addsyllabus,name="addsyllabus"),
 path('deletesy/', views.delete_data_syllabus, name='deletesy'),
 
 
+####Enquiry
+
+path('enquiry/', views.enquiry_,name='enquiry'),
+path('deleteten/', views.delete_data_enquiry, name='deleteten'),
+
+
+
+
+#add testimonial
+
+path('addtestimonial/', views.addtestimonial,name="addtestimonial"),
+path('deletetst/', views.delete_data_testimonial, name='deletetst'),
+
+
+
 ]

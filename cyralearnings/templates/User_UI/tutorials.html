@@ -143,10 +143,10 @@
                             
                             <div class=" p-2">
                                 {% csrf_token %}
-                                <form id="myForm">
+                                <form>
                                 <table><tr>
                                     <td><textarea name="w3review" rows="4" cols="50" id="comment" style="resize: none;"></textarea></td>
-                                    <td style="vertical-align: bottom;padding-bottom: 8.9px;"><button type="button" id="btncomment" onsubmit="myFunction()" class="btn-btn">Comment</button></td>
+                                    <td style="vertical-align: bottom;padding-bottom: 8.9px;"><button type="button" id="btncomment"  class="btn-btn">Comment</button></td>
                                     </tr>
                                 </table>
                             </form>
@@ -243,11 +243,7 @@ $.ajax(
 
     </script>
 
-<script>
-    function myFunction() {
-      document.getElementById("myForm").reset();
-    }
-    </script>
+
 
 
     <!-- JavaScript Libraries -->

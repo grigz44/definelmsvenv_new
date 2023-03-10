@@ -469,6 +469,11 @@ mark,
   max-width: 100%;
   height: auto; }
 
+  .img-preview{
+    max-width: 55px;
+    height:50px;
+  }
+
 .img-thumbnail {
   padding: 0.25rem;
   background-color: #e4e5e6;

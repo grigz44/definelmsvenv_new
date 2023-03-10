@@ -111,10 +111,29 @@ class VideoclassSerializer(serializers.ModelSerializer):
         fields='__all__'
 
 
+
+class pregistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=registration
+        fields=['image']
+
+
+
 class CommentSerializer(serializers.ModelSerializer):
+    user=serializers.StringRelatedField()
+    image = serializers.SerializerMethodField()
+
+
+    def get_image(self, obj):
+        
+        my_variable = self.context.get('my_variable')
+        # Perform your calculations here to get the value of the extra variable
+        return my_variable
+
+
     class Meta:
         model=videocomment
-        fields='__all__'
+        fields=['id','video','user','datetime','comment']
 
 
 
@@ -153,7 +172,10 @@ class ExamrsltSerializer(serializers.ModelSerializer):
             result_details.objects.create(examresult=results, **exam_data)
         return results
 
-
+class subexamserializer(serializers.ModelSerializer):
+    class Meta:
+        model=examresult
+        fields=['user']
 
 
 class SyllabusSerializer(serializers.ModelSerializer):
@@ -171,35 +193,35 @@ class NotesSerializer(serializers.ModelSerializer):
 
 
 
-# class pexam_masterSerializer(serializers.ModelSerializer):
-#     exam=serializers.StringRelatedField()
-#     course=serializers.StringRelatedField()
-#     class Meta:
-#         model=exam_master
-#         fields=['exam','course']
+class pexam_masterSerializer(serializers.ModelSerializer):
+    exam=serializers.StringRelatedField()
+    course=serializers.StringRelatedField()
+    class Meta:
+        model=exam_master
+        fields=['exam','course']
 
 
 
-# class ppexam_masterSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model=exam_master
-#         fields=['course','no_of_questions']
+class ppexam_masterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=exam_master
+        fields=['course','no_of_questions']
 
 
-# class pcourseSubjectallocationSerializer(serializers.ModelSerializer):
-#     subject=serializers.StringRelatedField()
-#     class Meta:
-#         model=course_subject_allocation
-#         fields=['subject']
+class pcourseSubjectallocationSerializer(serializers.ModelSerializer):
+    subject=serializers.StringRelatedField()
+    class Meta:
+        model=course_subject_allocation
+        fields=['subject']
         
 
 
-# class perfomanceserializer(serializers.ModelSerializer):
-#     exam=serializers.StringRelatedField()
-#     course=serializers.StringRelatedField()
-#     class Meta:
-#         model=examresult
-#         fields=['exam','course']
+class perfomanceserializer(serializers.ModelSerializer):
+    exam=serializers.StringRelatedField()
+    course=serializers.StringRelatedField()
+    class Meta:
+        model=examresult
+        fields=['exam','course']
 
 
 
@@ -216,8 +238,81 @@ class pcourseSerializer(serializers.ModelSerializer):
         model=course
         fields=['course_name','exam','subjects']
 
+
+
+ 
 class ExmresultSerializer(serializers.ModelSerializer):
+
+
+
+    perfomance = serializers.SerializerMethodField()
+
+    # Define the method to calculate the value of the extra variable
+    def get_perfomance(self, obj):
+        
+        my_variable = self.context.get('my_variable')
+        # Perform your calculations here to get the value of the extra variable
+        return my_variable
+    
+    exams = serializers.SerializerMethodField()
+
+    # Define the method to calculate the value of the extra variable
+    def get_exams(self, obj):
+        
+        my_variable = self.context.get('exams')
+        # Perform your calculations here to get the value of the extra variable
+        return my_variable
     
     class Meta:
         model=examresult
-        fields = ['total_correct','no_of_questions','course']
+        fields = ['user','total_correct','no_of_questions','perfomance','exams']
+
+
+
+
+class rsltserializer(serializers.ModelSerializer):
+
+    subjects = serializers.SerializerMethodField()
+
+    # Define the method to calculate the value of the extra variable
+    def get_subjects(self, obj):
+        
+        my_subjects = self.context.get('my_subjects')
+        # Perform your calculations here to get the value of the extra variable
+        return my_subjects
+
+
+    course=serializers.StringRelatedField()
+    exam=serializers.StringRelatedField()
+    class Meta:
+        model=examresult
+        fields=['user','course','exam','subjects']
+
+
+
+class rsltdtl(serializers.ModelSerializer):
+    question=serializers.StringRelatedField()
+    class Meta:
+        model=result_details
+        fields=['question']
+
+
+
+class testimonialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=testimonial
+        fields='__all__'
+
+
+
+class enquirySerializer(serializers.ModelSerializer):
+    class Meta:
+        model=enquiry
+        fields='__all__'
+
+
+class courseregSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=course_registration
+        fields='__all__'
+    

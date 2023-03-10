@@ -4,7 +4,7 @@ from lmsmainapp.views import*
 from User import views as api_views
 
 urlpatterns = [
-    path('', views.temp, name='index'),
+    path('', views.index, name='index'),
     path('login/', views.user_login, name='loginu'),
     path('logout/', views.user_logut, name='logoutu'),
     path('contact/', views.contact, name='contact'),

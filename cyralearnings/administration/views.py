@@ -748,3 +748,61 @@ def delete_data_syllabus(request):
     else:
         return JsonResponse({'status':0})
 
+
+
+
+################### Enquiry ########################
+
+def enquiry_(request):
+    if 'username' not in request.session:
+        return redirect('login')
+    else:
+           
+                details=enquiry.objects.all()
+                context = { 'st': details}
+                return render(request, 'administration/enquiry/enquiry.html',context)
+
+
+
+
+
+@csrf_exempt
+def delete_data_enquiry(request):
+    if request.method == 'POST':
+        id = request.POST.get('cid')
+        s = enquiry.objects.get(pk=id)
+        s.delete()
+        return JsonResponse({'status':1})
+    else:
+        return JsonResponse({'status':0})    
+
+
+#Testimonial
+
+def addtestimonial(request):
+    if 'username' not in request.session:
+        return redirect('login')
+    else:
+        if request.method == 'POST':
+            form = testimonialform(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                form = testimonialform()
+                designation = testimonial.objects.all()
+                context = {'form': form, 'st': designation}
+                return render(request, 'administration/testimonial/testimonial.html', context)
+        else:
+            form = testimonialform()
+        designation=testimonial.objects.all()
+        context = {'form': form, 'st': designation}
+        return render(request, 'administration/testimonial/testimonial.html', context)
+
+@csrf_exempt
+def delete_data_testimonial(request):
+    if request.method == 'POST':
+        id = request.POST.get('emid')
+        d = testimonial.objects.get(pk=id)
+        d.delete()
+        return JsonResponse({'status':1})
+    else:
+        return JsonResponse({'status':0})

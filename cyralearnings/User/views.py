@@ -50,14 +50,17 @@ def user_logut(request):
 
 
 #################### home ###############
-def temp(request):
+def index(request):
     if 'userid' not in request.session:
         return redirect('loginu')
     else:
         un=request.session['userid']   
         user=login.objects.filter(id=un).values
+        banners=banner.objects.all()
+        
         context={
-            'username':user
+            'username':user,
+            'bann':banners
         }
 
         return render(request, 'User_UI/index.html',context)
@@ -79,12 +82,12 @@ def coursereg(request):
         return render(request, 'User_UI/coursereg.html')
 
 
-def contact(request):
-    if 'userid' not in request.session:
-        return redirect('loginu')
-    else:
+# def contact(request):
+#     if 'userid' not in request.session:
+#         return redirect('loginu')
+#     else:
 
-        return render(request, 'User_UI/contact.html')
+#         return render(request, 'User_UI/contact.html')
 
 ############### all exam ###################
 
@@ -198,3 +201,22 @@ def coursedesc(request,id):
             'st': designation,
             }
         return render(request, 'User_UI/coursereg.html',context)
+    
+
+
+
+def contact(request):
+    if 'userid' not in request.session:
+        return redirect('loginu')
+    else:
+        if request.method == 'POST':
+            form = enquiryForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                form = enquiryForm()
+                context = {'form': form}
+                return render(request, 'User_UI/contact.html', context)
+        else:
+            form = enquiryForm()
+        context = {'form': form}
+        return render(request, 'User_UI/contact.html',context)

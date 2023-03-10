@@ -587,9 +587,6 @@ class GetQuestions(APIView):
         return Response(exam_questions)
 
 
-
-from django.contrib.auth.decorators import login_required
-
 # # @login_required(login_url='login')
 # def home_page(request):
 #     total_course   = course.objects.count()
@@ -676,6 +673,21 @@ class VideoClassView(APIView):
 
 
 #comment clear api
+
+class commentget(APIView):
+    def post(self,request):
+        crs=request.data['video']
+        video1=videocomment.objects.filter(video=crs)
+        noc=videocomment.objects.filter(video=crs).count()
+        serializer=CommentSerializer(video1,many=True)
+        for i in range(0,noc):
+            user=serializer.data[i]['user']
+            profile=registration.objects.filter(username=user)
+            serializer2=pregistrationSerializer(profile,many=True)
+            print(serializer2)
+        return Response(serializer.data)
+
+
 
 
 class commentview(APIView):
@@ -897,14 +909,11 @@ class SyllabusView(APIView):
         return Response(serializer.data)
 
 
-    def post(self,req):
-
-        serializer = SyllabusSerializer(data=req.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors)  
+    def post(self,request):
+        crs=request.data['course']
+        video1=syllabus.objects.filter(course=crs)
+        serializer=SyllabusSerializer(video1,many=True)
+        return Response(serializer.data)  
 
 
     def delete(self,req,id):
@@ -937,83 +946,139 @@ class notesView(APIView):
         subjects = notes.objects.all()       
         serializer = NotesSerializer(subjects,many=True)
         return Response(serializer.data)
+    
+
+    def post(self,request):
+
+        crs=request.data['video']
+        master1      = notes.objects.filter(video=crs)
+        serializer   = NotesSerializer(master1,many=True)
+        return Response(serializer.data)
+
     def delete(self,req,id):
 
         notes.objects.get(id=id).delete()
         return Response({"msg":1})
 
 
-# class perfomanceview(APIView):
-#     def get(self, request,id):
+      
+class testimonialView(APIView):
 
-#         exam_questions = []
-
+    def get(self, request):
         
-#         for exam_question in examresult.objects.filter(user=id):
-#             serializer = ExamrsltSerializer(exam_question)
-#             print(serializer.data.get('exam_master', None))
-#             master = exam_master.objects.filter(id=serializer.data.get('exam_master', None))
-#             tc=serializer.data.get('total_correct', None)
-            
-#             serializer1 = pexam_masterSerializer(master, many=True)
-#             exam_questions.append(serializer1.data[0])
-#             a=serializer1.data[0]
-#             print("###########################")
-#             print("exam:")
-#             print(a['exam'])
-#             print("###########################")
-#             print("cousre:")
-#             print(a['course'])
+        data = testimonial.objects.all()
+        serializer = testimonialSerializer(data, many=True)
+        return Response(serializer.data)
+    
 
+class enquiryView(APIView):
 
-#             serializer2 = ppexam_masterSerializer(master, many=True)
-#             b=serializer2.data[0]
-#             # serializer3=ExamrsltSerializer(exam_question, many=True)
-#             # c=serializer3.data[0]
-#             for suballo in course_subject_allocation.objects.filter(course=b['course']):
-#                 serializer3=pcourseSubjectallocationSerializer(suballo)
-#                 # allo.append(serializer3.data[0])
-#                 print(serializer3.data)
-#             print("###########################")
-#             print("course id:")
-#             print(b['course'])
-#             print("###########################")
-#             print("no od qus:")
-#             print(b['no_of_questions'])
-#             print("###########################")
-#             tq=b['no_of_questions']
-#             print("###########################")
-#             print("total correct:")
-#             print(tc)
-#             print("###########################")
-#             print("percentage:")
-#             p=(tc/tq)*100
-#             print(p)
-#             # totalc=c['total_correct']
-#             # print(totalc)
+    def get(self, request):
+        
+        data = enquiry.objects.all()
+        serializer = enquirySerializer(data, many=True)
+        return Response(serializer.data)
+    
 
-            
+    def post(self,req):
+        
+        serializer = enquirySerializer(data=req.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=201)
+        return Response(serializer.errors,status=404)
 
 
 
-            
-#         return Response(exam_questions)
 
 
 class perfomanceview(APIView):
 
     def get(self, request,id):
-        perfo=[]
-        for mcq in examresult.objects.filter(user=id):
-            serializer = ExmresultSerializer(mcq)
-            tq=serializer.data.get('no_of_questions')
-            print(tq)
-            tc=serializer.data.get('total_correct')
-            print(tc)
-            per=(tc/tq)*100
-            print(per)
-            subjects=course.objects.filter(id=serializer.data.get('course', None))
-            serializer2 = pcourseSerializer(subjects, many=True)
+        perfom=[]
+        data = examresult.objects.filter(user=id)
+        noexm=examresult.objects.filter(user=id).count()
+        serializer = ExmresultSerializer(data, many=True)
+        for i in range(0,noexm):
+            tc=serializer.data[i]['total_correct']
+            tq=serializer.data[i]['no_of_questions']
+            perfo=(tc/tq)*100
+            serializer = ExmresultSerializer(data, many=True,context={'my_variable': perfo,'exams':noexm})   
+            perfom.append(serializer.data[0])
+        
+        return Response(perfom)
+        
+
+
+# class subperfomanceview(APIView):
+
+#     def get(self, request,id):
+#         exam_questions = []
+
+#         for exam_question in examresult.objects.filter(user=id):
+#             serializer = ExamrsltSerializer(exam_question)
+#             print(serializer.data.get('course', None))
+#             questions = course_subject_allocation.objects.filter(course=serializer.data.get('course', None))
+#             serializer1 = pcourseSubjectallocationSerializer(questions, many=True)
+#             exam_questions.append(serializer1.data[0])
             
-            perfo.append(serializer2.data[0])
-        return Response(perfo)
+
+
+
+#         mcq        = examresult.objects.filter(user=id)
+#         serializer = rsltserializer(mcq, many=True)
+        
+        
+#         serializer = rsltserializer(mcq, many=True,context={'my_subjects': exam_questions})
+#         return Response (serializer.data)
+
+
+class subperfomanceview(APIView):
+
+    def get(self, request,id):
+        exam_questions = []
+
+        for exam_question in examresult.objects.filter(user=id):
+            serializer = ExamrsltSerializer(exam_question)
+            print(serializer.data.get('course', None))
+            questions = course_subject_allocation.objects.filter(course=serializer.data.get('course', None))
+            serializer1 = pcourseSubjectallocationSerializer(questions, many=True)
+            exam_questions.append(serializer1.data[0])
+            
+
+
+
+        mcq        = examresult.objects.filter(user=id)
+        # serializer = rsltserializer(mcq,many=True)
+        
+        
+        serializer = rsltserializer(mcq, many=True,context={'my_subjects': exam_questions})
+        return Response(serializer.data)
+        
+            
+
+
+        # exam_questions = result_details.objects.filter(examresult=id)
+        # serializer = rsltdtl(exam_questions, many=True)
+        # return Response (serializer.data)
+            
+class courseregpostView(APIView):
+
+    def post(self,req, *args, **kwarg):
+
+        print(req.data)
+        serializer = courseregSerializer(data=req.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+        
+
+
+class GetcrsregView(APIView):
+    def post(self,request):
+        crs=request.data['user']
+        video1=course_registration.objects.filter(user=crs)
+        serializer=courseregSerializer(video1,many=True)
+        return Response(serializer.data)

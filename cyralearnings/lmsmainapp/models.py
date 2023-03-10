@@ -231,6 +231,8 @@ class exam_master(models.Model):
     exam_end_date    = models.DateField()
     image            = models.ImageField(upload_to='exammaster',default="")
     exam_description = models.CharField(max_length=500,default="")
+    correct_mark     = models.FloatField(default=0)
+    incorrect_mark   = models.FloatField(default=0)
     is_draft         = models.BooleanField(default=False)
     user             = models.ForeignKey(login,on_delete=models.CASCADE)
 
@@ -317,7 +319,7 @@ class examresult(models.Model):
     user             = models.ForeignKey(login,on_delete=models.CASCADE)
     exam             = models.ForeignKey(exam,on_delete=models.CASCADE,default=54)
     course           = models.ForeignKey(course,on_delete=models.CASCADE,default=59)
-    exam_master             = models.ForeignKey(exam_master,on_delete=models.CASCADE)
+    exam_master      = models.ForeignKey(exam_master,on_delete=models.CASCADE)
     datetime         = models.DateTimeField(auto_now_add=True)
     no_of_questions  = models.IntegerField(default=0)
     total_correct    = models.IntegerField(default=0)
@@ -377,3 +379,28 @@ class syllabus(models.Model):
 
     class Meta:
         db_table='syllabus'
+
+
+
+
+
+class testimonial(models.Model):
+    id               = models.AutoField(primary_key=True)
+    datetime         = models.DateTimeField(auto_now_add=True)
+    name             = models.CharField(max_length=100)
+    profession       = models.CharField(max_length=100)
+    photo            = models.ImageField(upload_to='testimonial')
+    description      = models.CharField(max_length=2000)
+    
+    class Meta:
+        db_table='testimonial'
+
+class enquiry(models.Model):
+    id               = models.AutoField(primary_key=True)
+    name             = models.CharField(max_length=100)
+    email            = models.EmailField(max_length=300)
+    phone            = models.CharField(max_length=10)
+    message          = models.CharField(max_length=2000)
+
+    class Meta:
+        db_table='enquiry'

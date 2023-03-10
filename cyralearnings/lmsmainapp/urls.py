@@ -59,7 +59,8 @@ urlpatterns = [
     path('videoapi/', api_views.VideoClassView.as_view(), name="vdoapi"),
 
 
-    path('comment/', api_views.commentview.as_view(), name="commentclear"),
+    path('commentpost/', api_views.commentview.as_view(), name="commentclear"),
+    path('commentget/', api_views.commentget.as_view(), name="comment"),
     path('comment/<id>', api_views.commentview.as_view(), name="commentedit"),
 
 
@@ -90,6 +91,17 @@ urlpatterns = [
 
     path('perfomance/<id>', api_views.perfomanceview.as_view(), name="perfomance"),
 
+
+    path('subperfomance/<id>', api_views.subperfomanceview.as_view(), name="subperfomance"),
+
+
+
+    path('testimonial/', api_views.testimonialView.as_view(), name="testimonial"),
+    path('enquiry/', api_views.enquiryView.as_view(), name="enquiry"),
+
+
+    path('getcoursereg/', api_views.GetcrsregView.as_view(), name="course_reg"),
+    path('coursereg/', api_views.courseregpostView.as_view(), name="courseregpostView"),
     
 
     
