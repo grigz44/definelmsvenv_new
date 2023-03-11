@@ -118,10 +118,16 @@ class pregistrationSerializer(serializers.ModelSerializer):
         fields=['image']
 
 
+class PCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=videocomment
+        fields='__all__'
+
+
 
 class CommentSerializer(serializers.ModelSerializer):
     user=serializers.StringRelatedField()
-    image = serializers.SerializerMethodField()
+    image=serializers.SerializerMethodField()
 
 
     def get_image(self, obj):

@@ -79,7 +79,7 @@ class registrationView(APIView):
         return Response(serializer.data)
 
     def post(self,req):
-        Login={'username':req.data['mobile'],'password':req.data['mobile'],'role':0}
+        Login={'username':req.data['mobile'],'password':req.data['mobile'],'role':2}
         serializer = registrationSerializer(data=req.data)
         logserial=loginSerializer(data=Login)
         if serializer.is_valid():
@@ -680,11 +680,15 @@ class commentget(APIView):
         video1=videocomment.objects.filter(video=crs)
         noc=videocomment.objects.filter(video=crs).count()
         serializer=CommentSerializer(video1,many=True)
+        img=[]
         for i in range(0,noc):
             user=serializer.data[i]['user']
             profile=registration.objects.filter(username=user)
             serializer2=pregistrationSerializer(profile,many=True)
-            serializer=CommentSerializer(video1,many=True,context={'my_variable': serializer2})
+            img.append(serializer2)
+            for element in img:
+                print("#######################")
+                print(element)
         return Response(serializer.data)
 
 
@@ -694,15 +698,15 @@ class commentview(APIView):
     def get(self,request,id=None):
         if id is not None:
             subjects = videocomment.objects.get(id=id)
-            serializer = CommentSerializer(subjects)
+            serializer = PCommentSerializer(subjects)
             return Response(serializer.data) 
         subjects = videocomment.objects.all()       
-        serializer = CommentSerializer(subjects,many=True)
+        serializer = PCommentSerializer(subjects,many=True)
         return Response(serializer.data)
 
 
     def post(self,req):
-        serializer = CommentSerializer(data=req.data)
+        serializer = PCommentSerializer(data=req.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -717,7 +721,7 @@ class commentview(APIView):
 
     def put(self,req,id):
         subjects = videocomment.objects.filter(id=id).first()
-        serializer = CommentSerializer(subjects,data=req.data)
+        serializer = PCommentSerializer(subjects,data=req.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
