@@ -133,7 +133,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=videocomment
-        fields=['id','video','user','datetime','comment']
+        fields=['id','video','user','datetime','comment','image']
 
 
 

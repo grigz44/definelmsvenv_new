@@ -684,7 +684,7 @@ class commentget(APIView):
             user=serializer.data[i]['user']
             profile=registration.objects.filter(username=user)
             serializer2=pregistrationSerializer(profile,many=True)
-            print(serializer2)
+            serializer=CommentSerializer(video1,many=True,context={'my_variable': serializer2})
         return Response(serializer.data)
 
 
