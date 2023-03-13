@@ -103,6 +103,6 @@ urlpatterns = [
     path('getcoursereg/', api_views.GetcrsregView.as_view(), name="course_reg"),
     path('coursereg/', api_views.courseregpostView.as_view(), name="courseregpostView"),
     
-
+    path('Checksub/', api_views.Checksub.as_view(), name="Checksub"),
     
 ]

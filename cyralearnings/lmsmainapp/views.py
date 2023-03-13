@@ -679,16 +679,7 @@ class commentget(APIView):
         crs=request.data['video']
         video1=videocomment.objects.filter(video=crs)
         noc=videocomment.objects.filter(video=crs).count()
-        serializer=CommentSerializer(video1,many=True)
-        img=[]
-        for i in range(0,noc):
-            user=serializer.data[i]['user']
-            profile=registration.objects.filter(username=user)
-            serializer2=pregistrationSerializer(profile,many=True)
-            img.append(serializer2)
-            for element in img:
-                print("#######################")
-                print(element)
+        serializer=CommentSerializer2(video1,many=True)
         return Response(serializer.data)
 
 
@@ -698,15 +689,15 @@ class commentview(APIView):
     def get(self,request,id=None):
         if id is not None:
             subjects = videocomment.objects.get(id=id)
-            serializer = PCommentSerializer(subjects)
+            serializer = CommentSerializer(subjects)
             return Response(serializer.data) 
         subjects = videocomment.objects.all()       
-        serializer = PCommentSerializer(subjects,many=True)
+        serializer = CommentSerializer(subjects,many=True)
         return Response(serializer.data)
 
 
     def post(self,req):
-        serializer = PCommentSerializer(data=req.data)
+        serializer = CommentSerializer(data=req.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -721,7 +712,7 @@ class commentview(APIView):
 
     def put(self,req,id):
         subjects = videocomment.objects.filter(id=id).first()
-        serializer = PCommentSerializer(subjects,data=req.data)
+        serializer = CommentSerializer(subjects,data=req.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -1002,13 +993,16 @@ class perfomanceview(APIView):
         perfom=[]
         data = examresult.objects.filter(user=id)
         noexm=examresult.objects.filter(user=id).count()
-        serializer = ExmresultSerializer(data, many=True)
+        serializer1 = pExmresultSerializer(data, many=True)
         for i in range(0,noexm):
-            tc=serializer.data[i]['total_correct']
-            tq=serializer.data[i]['no_of_questions']
+            tc=serializer1.data[i]['total_correct']
+            tq=serializer1.data[i]['no_of_questions']
+            exm=serializer1.data[i]['exam']
+            print(exm)
             perfo=(tc/tq)*100
-            serializer = ExmresultSerializer(data, many=True,context={'my_variable': perfo,'exams':noexm})   
+            serializer = ExmresultSerializer(data, many=True,context={'perfomance': perfo,'exams':noexm,'no_of_questions':tq,'total_correct':tc,'exam':exm})   
             perfom.append(serializer.data[0])
+        
         
         return Response(perfom)
         
@@ -1026,7 +1020,6 @@ class perfomanceview(APIView):
 #             serializer1 = pcourseSubjectallocationSerializer(questions, many=True)
 #             exam_questions.append(serializer1.data[0])
             
-
 
 
 #         mcq        = examresult.objects.filter(user=id)
@@ -1086,3 +1079,15 @@ class GetcrsregView(APIView):
         video1=course_registration.objects.filter(user=crs)
         serializer=courseregSerializer(video1,many=True)
         return Response(serializer.data)
+    
+
+
+class Checksub(APIView):
+    def post(self,request):
+        usr=request.data['user']
+        crs=request.data['course']
+        itemcount=course_registration.objects.filter(user=usr,course=crs).count()
+        if itemcount>0:
+            return Response({"msg":"True"})
+        else:
+            return Response({"msg":"False"})

@@ -112,34 +112,21 @@ class VideoclassSerializer(serializers.ModelSerializer):
 
 
 
-class pregistrationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=registration
-        fields=['image']
 
 
-class PCommentSerializer(serializers.ModelSerializer):
+
+class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model=videocomment
         fields='__all__'
 
 
 
-class CommentSerializer(serializers.ModelSerializer):
+class CommentSerializer2(serializers.ModelSerializer):
     user=serializers.StringRelatedField()
-    image=serializers.SerializerMethodField()
-
-
-    def get_image(self, obj):
-        
-        my_variable = self.context.get('my_variable')
-        # Perform your calculations here to get the value of the extra variable
-        return my_variable
-
-
     class Meta:
         model=videocomment
-        fields=['id','video','user','datetime','comment','image']
+        fields=['id','video','user','datetime','comment']
 
 
 
@@ -247,16 +234,22 @@ class pcourseSerializer(serializers.ModelSerializer):
 
 
  
+class pExmresultSerializer(serializers.ModelSerializer):
+    exam=serializers.StringRelatedField()
+    class Meta:
+        model=examresult
+        fields = ['user','total_correct','no_of_questions','exam']
+ 
 class ExmresultSerializer(serializers.ModelSerializer):
 
-
+    # exam=serializers.StringRelatedField()
 
     perfomance = serializers.SerializerMethodField()
 
     # Define the method to calculate the value of the extra variable
     def get_perfomance(self, obj):
         
-        my_variable = self.context.get('my_variable')
+        my_variable = self.context.get('perfomance')
         # Perform your calculations here to get the value of the extra variable
         return my_variable
     
@@ -269,9 +262,40 @@ class ExmresultSerializer(serializers.ModelSerializer):
         # Perform your calculations here to get the value of the extra variable
         return my_variable
     
+
+    no_of_questions = serializers.SerializerMethodField()
+
+    # Define the method to calculate the value of the extra variable
+    def get_no_of_questions(self, obj):
+        
+        my_variable = self.context.get('no_of_questions')
+        # Perform your calculations here to get the value of the extra variable
+        return my_variable
+    
+
+    total_correct = serializers.SerializerMethodField()
+
+    # Define the method to calculate the value of the extra variable
+    def get_total_correct(self, obj):
+        
+        my_variable = self.context.get('total_correct')
+        # Perform your calculations here to get the value of the extra variable
+        return my_variable
+    
+
+    exam = serializers.SerializerMethodField()
+
+    # Define the method to calculate the value of the extra variable
+    def get_exam(self, obj):
+        
+        my_variable = self.context.get('exam')
+        # Perform your calculations here to get the value of the extra variable
+        return my_variable
+
+
     class Meta:
         model=examresult
-        fields = ['user','total_correct','no_of_questions','perfomance','exams']
+        fields = ['user','exams','no_of_questions','total_correct','perfomance','exam']
 
 
 
