@@ -9,12 +9,16 @@ from rest_framework.routers import DefaultRouter
 
 
 urlpatterns = [
+    
+    path('checkuser/', api_views.Loginview.as_view(), name="loginapi"),
+    # path('checkuser/', api_views.CheckuserView.as_view(), name="checkuser"),
+    
 
     path('loginapi/', api_views.loginView.as_view(), name="login1"),
     path('loginapi/<id>', api_views.loginView.as_view(), name="login_put_dlt"),
 
     path('registration/', api_views.registrationView.as_view(), name="registration"),
-    path('registration/<id>', api_views.registrationView.as_view(), name="registration_put_dlt"),
+    path('registration/<username>', api_views.registrationView.as_view(), name="registration_put_dlt"),
 
     path('exam/', api_views.examView.as_view(), name="exam"),
     path('exam/<id>', api_views.examView.as_view(), name="exam_put_dlt"),
@@ -57,6 +61,7 @@ urlpatterns = [
 
 
     path('videoapi/', api_views.VideoClassView.as_view(), name="vdoapi"),
+    path('videoapi/<id>', api_views.VideoClassView.as_view(), name="vdoapi"),
 
 
     path('commentpost/', api_views.commentview.as_view(), name="commentclear"),

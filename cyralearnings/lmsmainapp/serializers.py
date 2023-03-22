@@ -6,6 +6,12 @@ class loginSerializer(serializers.ModelSerializer):
     class Meta:
         model=login
         fields='__all__'
+        
+        
+class logincheckSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=login
+        fields='__all__'
 
 class registrationSerializer(serializers.ModelSerializer):
     class Meta:

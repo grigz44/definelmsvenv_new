@@ -10,6 +10,7 @@ class login(models.Model):
     username = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
     role     = models.IntegerField(null=True)
+    deviceId = models.CharField( max_length=100,null=True,default="")
 
     class Meta:
         db_table = 'login'

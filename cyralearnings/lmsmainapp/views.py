@@ -13,6 +13,35 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from .forms import *
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.models import User
+
+class Loginview(APIView):
+    def post(self,request):
+        def get_tokens_for_login(user):
+            refresh = RefreshToken.for_user(user)
+            
+            return {
+            'status':"success",
+            'refresh': str(refresh),
+            'token': str(refresh.access_token),
+            # 'data':str(serializer.data)
+            }
+        username=request.data.get("phone")
+        # password=request.data.get("password")
+        try:
+            log=login.objects.filter(username=username,role=2)
+            if(log):
+                user=login.objects.get_or_create(username=username,role=2,password=username)[0]
+                token=get_tokens_for_login(user)
+                serializer=loginSerializer(user,many=False)
+                token['data'] = serializer.data
+                return Response(token,status=status.HTTP_200_OK)
+            else:
+                raise ValueError
+        except:
+            return Response({"Message":"Wrong Credentials"},status=status.HTTP_401_UNAUTHORIZED)
+
 
 
 class WebLogin(APIView):
@@ -62,6 +91,17 @@ class loginView(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+        
+        
+class CheckuserView(APIView):
+    def post(self,req):
+        username = req.data['phone']
+        user = login.objects.filter(username = username,role=2).first()
+        if user is None:
+            return Response({"msg":"fail"})
+        else:
+            serializer=loginSerializer(user,many=False)
+            return Response({"msg":"success","data":serializer.data})
 
 
 # SERIALIZER FOR REGISTRATION OPERATIONS:
@@ -110,7 +150,11 @@ class registrationView(APIView):
             return Response(serializer.errors)
 
 
+
+from rest_framework.permissions import IsAuthenticated
 class examView(APIView):
+
+    # permission_classes=(IsAuthenticated,)
 
     def get(self,request,id=None):
         if id is not None:
