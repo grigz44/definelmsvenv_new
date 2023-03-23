@@ -40,7 +40,7 @@ class Loginview(APIView):
             else:
                 raise ValueError
         except:
-            return Response({"Message":"Wrong Credentials"},status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"status":"fail"},status=status.HTTP_401_UNAUTHORIZED)
 
 
 
@@ -119,18 +119,31 @@ class registrationView(APIView):
         return Response(serializer.data)
 
     def post(self,req):
-        Login={'username':req.data['mobile'],'password':req.data['mobile'],'role':2}
+        def get_tokens_for_login(user):
+            refresh = RefreshToken.for_user(user)
+            
+            return {
+            'status':"success",
+            'refresh': str(refresh),
+            'token': str(refresh.access_token),
+            # 'data':str(serializer.data)
+            }
+        Login={'username':req.data['mobile'],'password':req.data['mobile'],'deviceId':req.data['deviceId'],'role':2}
         serializer = registrationSerializer(data=req.data)
         logserial=loginSerializer(data=Login)
         if serializer.is_valid():
             serializer.save()
+            # user = serializer.instance
 
             if logserial.is_valid():
                 logserial.save()
-
-            return Response(serializer.data)
+                t=Login['username']
+                user=login.objects.get_or_create(username=t,role=2,password=t)[0]
+                token=get_tokens_for_login(user)
+                token['data'] = serializer.data
+            return Response(token)
         else:
-            return Response(serializer.errors)
+            return Response({"status":"fail","error":serializer.errors})
     
     def delete(self,req,username):
         registration.objects.filter(username=username).delete()
@@ -1135,3 +1148,74 @@ class Checksub(APIView):
             return Response({"msg":"True"})
         else:
             return Response({"msg":"False"})
+        
+        
+        
+        
+        
+        
+        
+
+    # def post(self,req):
+    #     def get_tokens_for_login(user):
+    #         refresh = RefreshToken.for_user(user)
+            
+    #         return {
+    #         'status':"success",
+    #         'refresh': str(refresh),
+    #         'token': str(refresh.access_token),
+    #         # 'data':str(serializer.data)
+    #         }
+    #     Login={'username':req.data['mobile'],'password':req.data['mobile'],'deviceId':req.data['deviceId'],'role':2}
+    #     serializer = registrationSerializer(data=req.data)
+    #     logserial=loginSerializer(data=Login)
+    #     if serializer.is_valid():
+    #         serializer.save()
+
+    #         if logserial.is_valid():
+    #             logserial.save()
+    #             t=Login['username']
+    #             user=login.objects.get_or_create(username=t,role=2,password=t)[0]
+    #             token=get_tokens_for_login(user)
+
+    #         return Response(serializer.data)
+    #     else:
+    #         return Response(serializer.errors)
+    
+    
+    
+    
+# def post(self, req):
+#         def get_tokens_for_login(user):
+#             refresh = RefreshToken.for_user(user)
+
+#             return {
+#                 'status': "success",
+#                 'refresh': str(refresh),
+#                 'token': str(refresh.access_token),
+#                 # 'data':str(serializer.data)
+#             }
+
+#         Login = {'username': req.data['mobile'], 'password': req.data['mobile'], 'deviceId': req.data['deviceId'], 'role': 2}
+#         serializer = registrationSerializer(data=req.data)
+#         logserial = loginSerializer(data=Login)
+
+#         if serializer.is_valid():
+#             try:
+#                 serializer.save()
+#                 user = serializer.instance
+
+#                 if logserial.is_valid():
+#                     logserial.save()
+#                     if serializer.instance:
+#                         user = login.objects.get(username=serializer.instance.mobile, role=2)
+#                         token = get_tokens_for_login(user)
+#                         return Response({'data': serializer.data, 'token': token})
+#                     else:
+#                         return Response({'status': 'failed', 'message': 'User not found.'})
+#                 else:
+#                     return Response({'status': 'failed', 'message': 'Login data is invalid.'})
+#             except Exception as e:
+#                 return Response({'status': 'failed', 'message': str(e)})
+#         else:
+#             return Response(serializer.errors)

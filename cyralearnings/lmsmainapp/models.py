@@ -25,7 +25,6 @@ class registration(models.Model):
     mobile     = models.CharField(max_length=10,default="",null=True)
     email      = models.EmailField(max_length=254,default="",null=True)
     username   = models.CharField(max_length=50,primary_key=True)
-    token      = models.CharField( max_length=50,null=True,default="")
     image      = models.ImageField(upload_to='register',null=True,default="")
 
     class Meta:
