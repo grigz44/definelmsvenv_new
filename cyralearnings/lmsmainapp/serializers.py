@@ -7,7 +7,10 @@ class loginSerializer(serializers.ModelSerializer):
         model=login
         fields='__all__'
         
-        
+class CustomUserTokenSerializer(serializers.Serializer):
+    access = serializers.CharField()
+    refresh = serializers.CharField()
+
 class logincheckSerializer(serializers.ModelSerializer):
     class Meta:
         model=login
@@ -58,6 +61,15 @@ class question_bankSerializer(serializers.ModelSerializer):
     class Meta:
         model=question_bank
         fields = '__all__'
+        
+        
+
+class question_bankSerializer1(serializers.ModelSerializer):
+    subject=serializers.StringRelatedField()
+    # question=serializers.StringRelatedField()
+    class Meta:
+        model=question_bank
+        fields = ['subject']
 
 
 class question_bank_optionsSerializer(serializers.ModelSerializer):
@@ -331,6 +343,13 @@ class rsltdtl(serializers.ModelSerializer):
     class Meta:
         model=result_details
         fields=['question']
+        
+class rsltdtl1(serializers.ModelSerializer):
+    # question=serializers.StringRelatedField()
+    class Meta:
+        model=result_details
+        fields='__all__'
+
 
 
 

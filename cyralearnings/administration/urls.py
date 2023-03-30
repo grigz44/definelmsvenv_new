@@ -22,7 +22,10 @@ path('deleteex/', views.delete_data_exam, name='deleteex'),
 path('editex/', views.edit_data_exam, name='editex'),
 
 ##############course#########################
-
+path('cousre/', views.home_course, name='add-course'),
+path('savecr/', views.save_data_course, name='savecr'),
+# path('deleteex/', views.delete_data_exam, name='deleteex'),
+path('editcr/', views.edit_data_course, name='editcr'),
 path('course1/', views.add_course,name='cr'),
 # path('savecr/', views.add_course),
 path('deletec/', views.delete_data_course, name='deletecr'),
@@ -61,7 +64,7 @@ path('questionbankdelete/', views.delete_data_question, name='deleteqb'),
 # path('editt/', views.edit_data_topic, name='edittp'),
 
 ##############exammaster########################
-path('emaster/', views.addexmaster, name='homeem'),
+path('exammaster/', views.addexmaster, name='homeem'),
 path('deleteem/', views.delete_data_exmaster, name='deleteem'),
 path('editst/', views.edit_data_exmaster,name='editst'),
 

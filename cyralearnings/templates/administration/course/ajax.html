@@ -1,5 +1,75 @@
 <script>
-   
+    // Save data
+    $('#btnsave').click(function(){
+        //console.log("Button Save Clicked");
+        output ="";
+        let eid = $('#exmid').val();
+        let n = $('#course_nameid').val();
+        let e = $('#descriptionid').val();
+        let c = $('#amountid').val();
+        let d= $('#durationid').val();
+        let r = $('#examid').val();
+        let f = $('#isdemandedid').val();
+        let g = $('#imageid').val();
+    
+        console.log(eid);
+    
+        if(n == ""){
+            console.log("Please Enter Name");
+        }else if(e == ""){
+            console.log("Please Enter Email");
+        }else if(c == ""){
+            console.log("Please Enter Course");
+        }else{
+            //console.log(n);
+            //console.log(e);
+            //console.log(c);
+    
+            mydata = {exmid:eid, course_name:n, description:e, amount:c,duration:d, exam:r, image:g, isdemanded:f};
+    
+            $.ajax({
+                url: "{% url 'savecr' %}",
+                method: "POST",
+                data: mydata,
+    
+                success:function(data){
+                 // console.log(data.status)
+                 x = data.student_data;
+    
+                 if(data.status == 'Data Saved'){
+                     console.log('Data Submitted');
+    
+                     for(i=0; i<x.length; i++){
+                         output += "<tr><td>" + x[i].id +
+                            "</td><td>" + x[i].course_name +
+                            "</td><td>" + x[i].description +
+                            "</td><td>" + x[i].amount +
+                            "</td><td>" + x[i].duration +
+                            "</td><td>" + x[i].exam +
+                            "</td><td>" + x[i].image +
+                            "</td><td>" + x[i].isdemanded +
+                            "</td><td> <input type='button' class='btn btn-warning btn-sm btn-edit' value='Edit' data-eid="+x[i].id + "> <input type='button' class='btn btn-danger btn-sm btn-del' value='Delete' data-eid="+ x[i].id + " />"
+                     }
+                     $('#tbody').html(output);
+                     $('#exmid').val("");
+                     $('form')[0].reset();
+                 }
+    
+                 if(data.status == 'Not Saved'){
+                     console.log('Unable Submit Data');
+                     $('#exmid').val("");
+                 }
+    
+    
+    
+                }
+            });
+    }
+    
+    })
+
+
+
    // Delete
    $('#tbody').on("click", ".btn-del", function deletecr(){
         var action = confirm("Are you sure you want to delete this course?");
@@ -34,6 +104,36 @@
 
     
  
+     
+    // Edit
+    $('#tbody').on("click", ".btn-edit", function(){
+        console.log("Edit Button Cliked");
+        let id = $(this).attr("data-eid");
     
+        console.log(id);
+    
+        mydata = {eid:id}
+    
+        $.ajax({
+            url: "{% url 'editcr' %}",
+            method:"POST",
+            data:mydata,
+    
+            success: function(data){
+                console.log(data);
+                $("#exmid").val(data.id);
+                $("#course_nameid").val(data.course_name);
+                $("#descriptionid").val(data.description);
+                $("#amountid").val(data.amount);
+                $("#durationid").val(data.duration);
+                $("#examid").val(data.exam);
+                $("#isdemandedid").val(data.image);
+                $("#imageid").val(data.isdemanded);
+                console.log(data.id);
+    
+    
+            },
+        })
+    })
  
 </script>

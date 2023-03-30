@@ -218,6 +218,46 @@ def add_course(request):
             return render(request, 'administration/course/course.html', context)
 
 
+
+
+def home_course(request):
+    if 'username' not in request.session:
+        return redirect('login')
+    else:
+        form = courseform1()
+        exm = course.objects.all()
+        context = {'form':form, 'exm':exm}
+        return render(request, 'administration/course/course.html', context)
+
+
+@csrf_exempt
+def save_data_course(request):
+    if request.method == 'POST':
+        form = courseform1(request.POST)
+        if form.is_valid():
+            eid = request.POST.get('exmid')
+            course_name = request.POST['course_name']
+            description = request.POST['description']
+            amount = request.POST['amount']
+            duration = request.POST.get('duration')
+            exams = request.POST['exam']
+            image = request.POST['image']
+            isdemanded = request.POST['isdemanded']
+            print('student id',eid)
+
+            if(eid == ''):
+                s = course(course_name=course_name, description=description, amount=amount,duration=duration, exams=exams, image=image,isdemanded=isdemanded)
+            else:
+                s = course(id=eid,course_name=course_name, description=description, amount=amount,duration=duration, exams=exams, image=image,isdemanded=isdemanded)
+            s.save()
+
+            exm = course.objects.values()
+            student_data = list(exm)
+            return JsonResponse({'status':'Data Saved', 'student_data':student_data})
+        else:
+            return JsonResponse({'status':'Not Saved'})    
+
+
 @csrf_exempt
 def delete_data_course(request):
     if request.method == 'POST':
@@ -228,7 +268,14 @@ def delete_data_course(request):
     else:
         return JsonResponse({'status':0})    
 
-
+@csrf_exempt
+def edit_data_course(request):
+    if request.method == 'POST':
+        id = request.POST.get('eid')
+        print(id)
+        studen = course.objects.get(pk=id)
+        course_data = {'id':studen.id, 'course_name':studen.course_name, 'description':studen.description, 'amount':studen.amount,'duration':studen.duration,'exam':studen.exam,'image':studen.image,'isdemanded':studen.isdemanded}
+        return JsonResponse(course_data)
 
 ########################## add subject ########################
 

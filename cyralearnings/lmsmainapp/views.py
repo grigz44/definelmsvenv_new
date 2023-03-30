@@ -15,6 +15,8 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
+from django.conf import settings
+import jwt
 
 class Loginview(APIView):
     def post(self,request):
@@ -25,16 +27,18 @@ class Loginview(APIView):
             'status':"success",
             'refresh': str(refresh),
             'token': str(refresh.access_token),
-            # 'data':str(serializer.data)
             }
         username=request.data.get("phone")
-        # password=request.data.get("password")
+        use=login.objects.filter(username=username).first()
+        serializer=loginSerializer(use,many=False)
+       
         try:
             log=login.objects.filter(username=username,role=2)
             if(log):
-                user=login.objects.get_or_create(username=username,role=2,password=username)[0]
+                
+                user=User.objects.get_or_create(username="user")[0]
                 token=get_tokens_for_login(user)
-                serializer=loginSerializer(user,many=False)
+                
                 token['data'] = serializer.data
                 return Response(token,status=status.HTTP_200_OK)
             else:
@@ -126,19 +130,16 @@ class registrationView(APIView):
             'status':"success",
             'refresh': str(refresh),
             'token': str(refresh.access_token),
-            # 'data':str(serializer.data)
             }
         Login={'username':req.data['mobile'],'password':req.data['mobile'],'deviceId':req.data['deviceId'],'role':2}
         serializer = registrationSerializer(data=req.data)
         logserial=loginSerializer(data=Login)
         if serializer.is_valid():
             serializer.save()
-            # user = serializer.instance
 
             if logserial.is_valid():
                 logserial.save()
-                t=Login['username']
-                user=login.objects.get_or_create(username=t,role=2,password=t)[0]
+                user=User.objects.get_or_create(username="user")[0]
                 token=get_tokens_for_login(user)
                 token['data'] = serializer.data
             return Response(token)
@@ -164,11 +165,17 @@ class registrationView(APIView):
 
 
 
+from rest_framework.decorators import permission_classes, authentication_classes
+import jwt
+from django.conf import settings
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+
 class examView(APIView):
 
-    # permission_classes=(IsAuthenticated,)
-
+    # authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     def get(self,request,id=None):
         if id is not None:
             exam1      = exam.objects.get(id=id)
@@ -204,34 +211,6 @@ class examView(APIView):
             return Response(serializer.errors)  
 
 
-# #course
-
-# def addcourse(request):
-#         """Process images uploaded by users"""
-#         if request.method == 'POST':
-#             form = courseform1(request.POST, request.FILES)
-#             if form.is_valid():
-#                 form.save()
-#                 return render(request, 'course.html', {'form': form})
-                
-#         else:
-#             form = courseform1()
-#         return render(request, 'course.html', {'form': form})
-
-# # def add_course(request):
-# #         if request.method == 'POST':
-# #             form = courseform1(request.POST, request.FILES)
-# #             if form.is_valid():
-# #                 form.save()
-# #                 designation = course.objects.all()
-# #                 context = {'form': form, 'st': designation}
-# #                 return render(request, 'course/course.html',context)
-                
-# #         else:
-# #             form = courseform1()
-# #         designation = course.objects.all()
-# #         context = {'form': form, 'st': designation}
-# #         return render(request, 'course/course.html', context)
 
 class courseView(APIView):
 
@@ -276,22 +255,6 @@ class courseView(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)  
-
-
-#subject adding
-# def addsubject(request):
-#         """Process images uploaded by users"""
-#         if request.method == 'POST':
-#             form = subjectForm(request.POST, request.FILES)
-#             if form.is_valid():
-#                 form.save()
-#                 # Get the current instance object to display in the template
-#                 img_obj = form.instance
-#                 return render(request, 'subject.html', {'form': form})
-#         else:
-#             form = subjectForm()
-#         return render(request, 'subject.html', {'form': form})
-
 
 #SERIALIZERS FOR SUBJECT OPERATION
 
@@ -1085,7 +1048,9 @@ class perfomanceview(APIView):
         
 #         serializer = rsltserializer(mcq, many=True,context={'my_subjects': exam_questions})
 #         return Response (serializer.data)
-
+from django.db.models import Count
+import random
+from django.db.models import F
 
 class subperfomanceview(APIView):
 
@@ -1095,26 +1060,118 @@ class subperfomanceview(APIView):
         for exam_question in examresult.objects.filter(user=id):
             serializer = ExamrsltSerializer(exam_question)
             print(serializer.data.get('course', None))
-            questions = course_subject_allocation.objects.filter(course=serializer.data.get('course', None))
-            serializer1 = pcourseSubjectallocationSerializer(questions, many=True)
+            crs = course_subject_allocation.objects.filter(course=serializer.data.get('course', None))
+            serializer1 = pcourseSubjectallocationSerializer(crs, many=True)
             exam_questions.append(serializer1.data[0])
+            ep=result_details.objects.filter(examresult=serializer.data.get('id',None))
+            serializer2= rsltdtl1(ep, many=True)
+            for item in serializer2.data:
+                print("#################")
+                print(item.get('question', None))
+            for qs in question_bank.objects.filter(id=item.get('question',None)):
+                serializer4=question_bankSerializer1(qs)
+                print("##################")
+                sub= serializer4.data.get('subject',None)  
+                l1=[]
+                l1.append(serializer4.data)
+                print(sub) 
+                for ite in serializer1.data:
+                    print("#################")
+                    print(ite.get('subject', None))
+                    ls=[]
+                    ls.append(ite)
+                    if l1==ls:
+                        
+                        print("same")
+                        
+                    else:
+                        print("not same")
+                        
+                        
+                        
+                
+                   
+                
+
+
+
+            mcq        = examresult.objects.filter(user=id)
+            # serializer = rsltserializer(mcq,many=True)
+            
+            
+            serializer3 = rsltserializer(mcq, many=True,context={'my_subjects': exam_questions})
+            return Response(serializer3.data)
+        
             
 
 
-
-        mcq        = examresult.objects.filter(user=id)
-        # serializer = rsltserializer(mcq,many=True)
-        
-        
-        serializer = rsltserializer(mcq, many=True,context={'my_subjects': exam_questions})
-        return Response(serializer.data)
-        
-            
+    #     # exam_questions = result_details.objects.filter(examresult=id)
+    #     # serializer = rsltdtl(exam_questions, many=True)
+    #     # return Response (serializer.data)
 
 
-        # exam_questions = result_details.objects.filter(examresult=id)
-        # serializer = rsltdtl(exam_questions, many=True)
-        # return Response (serializer.data)
+    # def post(self, request):
+        
+    #     crs=request.data['user']
+    # # Step 1: Retrieve all the exams attempted by the user.
+    #     exams_attempted = examresult.objects.filter(user=crs).select_related('exam_master__course', 'exam_master').prefetch_related('attent__question')
+
+    #     # Step 2: For each exam, calculate the percentage of correct answers.
+    #     exam_percentage = {}
+    #     for exam in exams_attempted:
+    #         total_questions = exam.no_of_questions
+    #         correct_answers = result_details.objects.filter(examresult_id=exam.id, correct_answer=F('user_answer')).count()
+    #         percentage = round(correct_answers / total_questions * 100, 2)
+    #         exam_percentage[exam.exam_master.course.course_name + " " + exam.exam_master.name] = percentage
+
+    #     # Step 3: For each subject in the course, calculate the percentage of correct answers.
+    #     courses = {}
+    #     for exam in exams_attempted:
+    #         course_name = exam.exam_master.course.course_name
+    #         exam_name = exam.exam_master.name
+
+    #         if course_name not in courses:
+    #             courses[course_name] = {
+    #                 'Exam': exam_name,
+    #                 'Subjects': {}
+    #             }
+
+    #         for subject in exam.exam_master.course.subjects.all():
+    #             subject_id = subject.id
+    #             subject_name = subject.subject
+
+    #             if subject_id not in courses[course_name]['Subjects']:
+    #                 courses[course_name]['Subjects'][subject_id] = {
+    #                     'id': subject_id,
+    #                     'Name': subject_name,
+    #                     'Confidence level': 0,
+    #                     'color': '#'+str(hex(random.randint(0, 0xFFFFFF)))[2:].zfill(6)
+    #                 }
+
+    #             total_questions = question_bank.objects.filter(subject=subject_id, status=True).count()
+    #             correct_answers = result_details.objects.filter(examresult_id=exam.id, question__subject_id=subject_id, correct_answer=F('user_answer')).count()
+    #             if total_questions == 0:
+    #                 percentage = 0
+    #             else:
+    #                 percentage = round(correct_answers / total_questions * 100, 2)
+    #                 courses[course_name]['Subjects'][subject_id]['Confidence level'] += percentage
+
+    #                 for course in courses:
+    #                     for subject in courses[course]['Subjects']:
+    #                         courses[course]['Subjects'][subject]['Confidence level'] /= len(exams_attempted)
+
+    #                 # Step 4: Return the result in the desired format.
+    #                 result = []
+    #                 for course in courses:
+    #                     course_result = {
+    #                         'course': course,
+    #                         'Exam': courses[course]['Exam'],
+    #                         'Subjects': list(courses[course]['Subjects'].values())
+    #                     }
+    #                     result.append(course_result)
+
+    #                 return Response(result, safe=False)
+
             
 class courseregpostView(APIView):
 
@@ -1155,67 +1212,3 @@ class Checksub(APIView):
         
         
         
-
-    # def post(self,req):
-    #     def get_tokens_for_login(user):
-    #         refresh = RefreshToken.for_user(user)
-            
-    #         return {
-    #         'status':"success",
-    #         'refresh': str(refresh),
-    #         'token': str(refresh.access_token),
-    #         # 'data':str(serializer.data)
-    #         }
-    #     Login={'username':req.data['mobile'],'password':req.data['mobile'],'deviceId':req.data['deviceId'],'role':2}
-    #     serializer = registrationSerializer(data=req.data)
-    #     logserial=loginSerializer(data=Login)
-    #     if serializer.is_valid():
-    #         serializer.save()
-
-    #         if logserial.is_valid():
-    #             logserial.save()
-    #             t=Login['username']
-    #             user=login.objects.get_or_create(username=t,role=2,password=t)[0]
-    #             token=get_tokens_for_login(user)
-
-    #         return Response(serializer.data)
-    #     else:
-    #         return Response(serializer.errors)
-    
-    
-    
-    
-# def post(self, req):
-#         def get_tokens_for_login(user):
-#             refresh = RefreshToken.for_user(user)
-
-#             return {
-#                 'status': "success",
-#                 'refresh': str(refresh),
-#                 'token': str(refresh.access_token),
-#                 # 'data':str(serializer.data)
-#             }
-
-#         Login = {'username': req.data['mobile'], 'password': req.data['mobile'], 'deviceId': req.data['deviceId'], 'role': 2}
-#         serializer = registrationSerializer(data=req.data)
-#         logserial = loginSerializer(data=Login)
-
-#         if serializer.is_valid():
-#             try:
-#                 serializer.save()
-#                 user = serializer.instance
-
-#                 if logserial.is_valid():
-#                     logserial.save()
-#                     if serializer.instance:
-#                         user = login.objects.get(username=serializer.instance.mobile, role=2)
-#                         token = get_tokens_for_login(user)
-#                         return Response({'data': serializer.data, 'token': token})
-#                     else:
-#                         return Response({'status': 'failed', 'message': 'User not found.'})
-#                 else:
-#                     return Response({'status': 'failed', 'message': 'Login data is invalid.'})
-#             except Exception as e:
-#                 return Response({'status': 'failed', 'message': str(e)})
-#         else:
-#             return Response(serializer.errors)
