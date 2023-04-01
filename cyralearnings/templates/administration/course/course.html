@@ -5,9 +5,9 @@
 <div class="card">
   <div class="card-header">course Register Form</div>
   <div class="card-body">
-<form action="" method="post" enctype="multipart/form-data">
+<form action="" method="post" id="my-form" enctype="multipart/form-data">
     {% csrf_token %}
-    
+    <input type="hidden" name="exmid" id="exmid" />
      {{ form.as_p }}
     
     <button type="submit" class="btn btn-success">Upload</button>
@@ -47,7 +47,7 @@
           <td><img  class="img-preview" src="{{st.image.url}}" alt=""></td>
           <td>{{st.user}}</td>
           <td>
-            <input type="button" value="Edit" class="btn btn-warning btn-sm btn-edit" data-eid="{{st.id}}"><br><br>
+           <a href="{% url 'editcourse' st.id %}" input type="button"  value="Edit" class="btn btn-warning btn-sm btn-edit" data-eid="{{st.id}}">Edit</a><br><br>
               <input type="button" value="Delete" onliClick="deletecr()" class="btn btn-danger btn-sm btn-del" data-eid="{{st.id}}">
 
           </td>

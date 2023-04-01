@@ -34,28 +34,6 @@
     
     
     
-    // Edit
-    $('#tbody').on("click", ".btn-edit", function(){
-        console.log("Edit Button Cliked");
-        let id = $(this).attr("data-sid");
-        console.log(id);
-        mydata = {sid:id}
-        $.ajax({
-            url: "{% url 'editst' %}",
-            method:"POST",
-            data:mydata,
-            success: function(data){
-                console.log(data);
-                $("#topid").val(data.id);
-                $("#nameid").val(data.name);
-                $("#descriptionid").val(data.description);
-                $("#subjectid").val(data.subject);
-                console.log(data.id);
-    
-    
-            },
-        })
-    })
     
     
     </script>

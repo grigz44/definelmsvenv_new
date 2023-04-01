@@ -46,6 +46,8 @@
           <td>{{st.videolink}}</td>
           <td>{{st.user}}</td>
           <td>
+
+            <a href="{% url 'editvd' st.id %}" input type="button"  value="Edit" class="btn btn-warning btn-sm btn-edit" data-eid="{{st.id}}">Edit</a><br><br>
               <input type="button" value="Delete" onliClick="deletesu()" class="btn btn-danger btn-sm btn-del" data-sid="{{st.id}}">
           </td>
       </tr>

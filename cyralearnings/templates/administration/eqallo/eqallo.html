@@ -35,7 +35,7 @@
                 <td>{{st.exam_master}}</td>
                 <td>{{st.question}}</td>
                 <td>
-                    
+                  <a href="{% url 'editq' st.id %}" input type="button"  value="Edit" class="btn btn-warning btn-sm btn-edit" data-eid="{{st.id}}">Edit</a><br><br>
                     <input type="button" value="Delete" onliClick="deleteex()" class="btn btn-danger btn-sm btn-del" data-eid="{{st.id}}">
 
                 </td>

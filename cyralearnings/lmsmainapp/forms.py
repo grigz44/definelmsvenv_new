@@ -5,16 +5,7 @@ from .models import *
 
 
 
-class courseForm(forms.ModelForm):
-    """Form for the image model"""
-    class Meta:
-        model = course
-        fields = ('course_name','description','amount','duration','exam','image','user')
-class subjectForm(forms.ModelForm):
-    """Form for the image model"""
-    class Meta:
-        model = subject
-        fields = ('subject_name','description','image','user')
+
 
 class examForm(forms.ModelForm):
 
@@ -261,8 +252,8 @@ class syllabusform(forms.ModelForm):
         model = syllabus
         fields = ('course','syllabus','isactive')
         widgets = {
-            'course'     : forms.Select(attrs={'class':'form-control','id':'subjectid'}),
-            'syllabus'    : forms.TextInput(attrs={'class':'form-control','id':'notenameid'}),
+            'course'     : forms.Select(attrs={'class':'form-control','id':'courseid'}),
+            'syllabus'    : forms.TextInput(attrs={'class':'form-control','id':'syllabusid'}),
             'isactive'    : forms.NullBooleanSelect(attrs={'class':'form-control','id':'is_activeid'}),
             }
 

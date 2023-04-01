@@ -54,6 +54,7 @@
           <td>{{st.user}}</td>
           <td><img  class="img-preview" src="{{st.image.url}}" alt=""></td>
           <td>
+            <a href="{% url 'editst' st.id %}" input type="button"  value="Edit" class="btn btn-warning btn-sm btn-edit" data-eid="{{st.id}}">Edit</a><br><br>
               <input type="button" value="Delete" onliClick="deletesu()" class="btn btn-danger btn-sm btn-del" data-sid="{{st.id}}">
           </td>
       </tr>

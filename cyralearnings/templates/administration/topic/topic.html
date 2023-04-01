@@ -39,7 +39,7 @@
           <td>{{st.subject}}</td>
           <td>{{st.user}}</td>
           <td>
-            
+            <a href="{% url 'edittp' st.id %}" input type="button"  value="Edit" class="btn btn-warning btn-sm btn-edit" data-eid="{{st.id}}">Edit</a><br><br>
               <input type="button" value="Delete" onliClick="deletecr()" class="btn btn-danger btn-sm btn-del" data-eid="{{st.id}}">
 
           </td>

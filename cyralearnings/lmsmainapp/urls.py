@@ -25,7 +25,7 @@ urlpatterns = [
 
     path('courseall/', api_views.courseView.as_view(), name="course"),
     path('course/<id>', api_views.courseView.as_view(), name="course_put_dlt"),
-    path('course/', api_views.courseview.as_view(), name="course"),
+    path('course/', api_views.Courseview.as_view(), name="course"),
     path('demandedcourse/', api_views.isdemanded.as_view(), name="demandedcourse"),
     
  

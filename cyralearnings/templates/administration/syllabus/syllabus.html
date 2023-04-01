@@ -6,8 +6,10 @@
   <div class="card-body">
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
+    <input type="hidden" name="exmid" id="exmid">
      {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Upload</button>
+     <!-- <input type="button" class="btn btn-success" value="Submit" id="btnsave"> -->
+    <button type="submit" class="btn btn-success"  id="btnsave">Upload</button>
   </form>
 </div>
 </div>
@@ -35,6 +37,8 @@
           <td>{{st.isactive}}</td>
           <td>{{st.user}}</td>
           <td>
+
+            <a href="{% url 'editsyl' st.id %}" input type="button"  value="Edit" class="btn btn-warning btn-sm btn-edit" data-eid="{{st.id}}">Edit</a><br><br>
               <input type="button" value="Delete" onliClick="deletebr()" class="btn btn-danger btn-sm btn-del" data-bid="{{st.id}}">
           </td>
       </tr>

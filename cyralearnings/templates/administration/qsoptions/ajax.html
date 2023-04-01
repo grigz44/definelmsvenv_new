@@ -35,32 +35,4 @@ $('#tbody').on("click", ".btn-del", function deleteop(){
 
 
 
-// Edit
-$('#tbody').on("click", ".btn-edit", function(){
-    console.log("Edit Button Cliked");
-    let id = $(this).attr("data-sid");
-
-    console.log(id);
-
-    mydata = {sid:id}
-
-    $.ajax({
-        url: "{% url 'editop' %}",
-        method:"POST",
-        data:mydata,
-
-        success: function(data){
-            console.log(data);
-            $("#dsnid").val(data.id);
-            $("#examnameid").val(data.exam_name);
-            $("#descriptionid").val(data.description);
-            $("#remarksid").val(data.remarks);
-            console.log(data.id);
-
-
-        },
-    })
-})
-
-
 </script>

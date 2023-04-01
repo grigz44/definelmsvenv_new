@@ -481,7 +481,7 @@ class masterView(APIView):
     #     return Response(serializer.data)  
 
 
-class courseview(APIView):
+class Courseview(APIView):
 
     def post(self,request):
         exm=request.data['exam']

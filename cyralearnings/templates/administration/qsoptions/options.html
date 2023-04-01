@@ -40,6 +40,7 @@
                   <td>{{st.identifier}}</td>
                   
                   <td>
+                    <a href="{% url 'editop' st.id %}" input type="button"  value="Edit" class="btn btn-warning btn-sm btn-edit" data-eid="{{st.id}}">Edit</a><br><br>
                       <input type="button" onclick="deleteop()" value="Delete" class="btn btn-danger btn-sm btn-del" data-oid="{{st.id}}">
 
                   </td>

@@ -220,42 +220,42 @@ def add_course(request):
 
 
 
-def home_course(request):
-    if 'username' not in request.session:
-        return redirect('login')
-    else:
-        form = courseform1()
-        exm = course.objects.all()
-        context = {'form':form, 'exm':exm}
-        return render(request, 'administration/course/course.html', context)
+# def home_course(request):
+#     if 'username' not in request.session:
+#         return redirect('login')
+#     else:
+#         form = courseform1()
+#         exm = course.objects.all()
+#         context = {'form':form, 'st':exm}
+#         return render(request, 'administration/course/course.html', context)
 
 
-@csrf_exempt
-def save_data_course(request):
-    if request.method == 'POST':
-        form = courseform1(request.POST)
-        if form.is_valid():
-            eid = request.POST.get('exmid')
-            course_name = request.POST['course_name']
-            description = request.POST['description']
-            amount = request.POST['amount']
-            duration = request.POST.get('duration')
-            exams = request.POST['exam']
-            image = request.POST['image']
-            isdemanded = request.POST['isdemanded']
-            print('student id',eid)
+# @csrf_exempt
+# def save_data_course(request):
+#     if request.method == 'POST':
+#         form = courseform1(request.POST)
+#         if form.is_valid():
+#             eid = request.POST.get('exmid')
+#             course_name = request.POST['course_name']
+#             description = request.POST['description']
+#             amount = request.POST['amount']
+#             duration = request.POST.get('duration')
+#             exams = request.POST['exam']
+#             image = request.POST['image']
+#             isdemanded = request.POST['isdemanded']
+#             print('student id',eid)
 
-            if(eid == ''):
-                s = course(course_name=course_name, description=description, amount=amount,duration=duration, exams=exams, image=image,isdemanded=isdemanded)
-            else:
-                s = course(id=eid,course_name=course_name, description=description, amount=amount,duration=duration, exams=exams, image=image,isdemanded=isdemanded)
-            s.save()
+#             if(eid == ''):
+#                 s = course(course_name=course_name, description=description, amount=amount,duration=duration, exams=exams, image=image,isdemanded=isdemanded)
+#             else:
+#                 s = course(id=eid,course_name=course_name, description=description, amount=amount,duration=duration, exams=exams, image=image,isdemanded=isdemanded)
+#             s.save()
 
-            exm = course.objects.values()
-            student_data = list(exm)
-            return JsonResponse({'status':'Data Saved', 'student_data':student_data})
-        else:
-            return JsonResponse({'status':'Not Saved'})    
+#             exm = course.objects.values()
+#             student_data = list(exm)
+#             return JsonResponse({'status':'Data Saved', 'student_data':student_data})
+#         else:
+#             return JsonResponse({'status':'Not Saved'})    
 
 
 @csrf_exempt
@@ -266,16 +266,20 @@ def delete_data_course(request):
         s.delete()
         return JsonResponse({'status':1})
     else:
-        return JsonResponse({'status':0})    
-
-@csrf_exempt
-def edit_data_course(request):
+        return JsonResponse({'status':0})  
+    
+      
+def editcourse(request,id):
+    crs =course.objects.get(id=id)
+    form=courseform1(instance=crs)
     if request.method == 'POST':
-        id = request.POST.get('eid')
-        print(id)
-        studen = course.objects.get(pk=id)
-        course_data = {'id':studen.id, 'course_name':studen.course_name, 'description':studen.description, 'amount':studen.amount,'duration':studen.duration,'exam':studen.exam,'image':studen.image,'isdemanded':studen.isdemanded}
-        return JsonResponse(course_data)
+        form = courseform1(request.POST, request.FILES, instance=crs)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            return redirect('addcourse') 
+    context = {'forms': form}
+    return render(request,'administration/course/editcourse.html',context)
 
 ########################## add subject ########################
 
@@ -317,7 +321,19 @@ def delete_data_subject(request):
     else:
         return JsonResponse({'status':0}) 
 
-
+  
+@csrf_exempt
+def editsubject(request,id):
+    sub =subject.objects.get(id=id)
+    form=subjectform(instance=sub)
+    if request.method == 'POST':
+        form = subjectform(request.POST, request.FILES, instance=sub)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            return redirect('sub') 
+    context = {'forms': form}
+    return render(request,'administration/subject/editsub.html',context)
 ######################add topic ###########################
 
 
@@ -358,6 +374,17 @@ def delete_data_topic(request):
         return JsonResponse({'status':0})    
 
 
+def edittopic(request,id):
+    top =topic.objects.get(id=id)
+    form=topicform(instance=top)
+    if request.method == 'POST':
+        form = topicform(request.POST, request.FILES, instance=top)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            return redirect('topicc') 
+    context = {'forms': form}
+    return render(request,'administration/topic/edittopic.html',context)
 
 ######################add subtopic ###########################
 
@@ -393,6 +420,19 @@ def delete_data_subtopic(request):
     else:
         return JsonResponse({'status':0})    
 
+
+@csrf_exempt
+def editsubtopic(request,id):
+    st =Subtopics.objects.get(id=id)
+    form=subtopicform(instance=st)
+    if request.method == 'POST':
+        form = subtopicform(request.POST, request.FILES, instance=st)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            return redirect('topicsub') 
+    context = {'forms': form}
+    return render(request,'administration/subtopic/editst.html',context)
 
         
 ######################add question ###########################
@@ -435,6 +475,17 @@ def delete_data_question(request):
 
 
 
+def editqs(request,id):
+    qs =question_bank.objects.get(id=id)
+    form=question_bankform(instance=qs)
+    if request.method == 'POST':
+        form = question_bankform(request.POST, request.FILES, instance=qs)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            return redirect('qbadd') 
+    context = {'forms': form}
+    return render(request,'administration/questionbank/editqb.html',context)
 ################# add exam master ###########################
 
 def addexmaster(request):
@@ -472,13 +523,17 @@ def delete_data_exmaster(request):
 
 
 @csrf_exempt
-def edit_data_exmaster(request):
+def editem(request,id):
+    crs =exam_master.objects.get(id=id)
+    form=exammasterForm(instance=crs)
     if request.method == 'POST':
-        id = request.POST.get('sid')
-        examo = exam_master.objects.get(pk=id)
-        exam_data = {'id':examo.id, 'topic_name':examo.topic_name, 'description':examo.description, 'subject':examo.subject, 'user':examo.user}
-        return JsonResponse(exam_data)
-
+        form = exammasterForm(request.POST, request.FILES, instance=crs)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            return redirect('homeem') 
+    context = {'forms': form}
+    return render(request,'administration/exam_master/editem.html',context)
 
 ##################### QUESTIONBANK OPTIONS ##################
 
@@ -519,13 +574,17 @@ def delete_data_addoptions(request):
 
 
 @csrf_exempt
-def edit_data_addoptions(request):
+def editop(request,id):
+    crs =question_bank_options.objects.get(id=id)
+    form=optionsForm(instance=crs)
     if request.method == 'POST':
-        id = request.POST.get('eid')
-        #print('Exam ID',id)
-        examo = topic.objects.get(pk=id)
-        exam_data = {'id':examo.id, 'exam_name':examo.exam_name,'description':examo.description,'remarks':examo.remarks}
-        return JsonResponse(exam_data)
+        form = optionsForm(request.POST, request.FILES, instance=crs)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            return redirect('op') 
+    context = {'forms': form}
+    return render(request,'administration/qsoptions/editoption.html',context)
 
 
 
@@ -566,15 +625,21 @@ def deletevideo(request):
         return JsonResponse({'status':0})    
 
 
-# @csrf_exempt
-# def editvideo(request):
-#     if request.method == 'POST':
-#         id = request.POST.get('sid')
-#         examo = video_class.objects.get(pk=id)
-#         exam_data = {'id':examo.id, 'topic_name':examo.topic_name, 'description':examo.description, 'subject':examo.subject, 'user':examo.user}
-#         return JsonResponse(exam_data)
+def editvideo(request,id):
+    crs =video_class.objects.get(id=id)
+    form=videoform(instance=crs)
+    if request.method == 'POST':
+        form = videoform(request.POST, request.FILES, instance=crs)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            return redirect('vdo') 
+    context = {'forms': form}
+    return render(request,'administration/videoclass/editvideo.html',context)
 
-#add banner
+
+##################add banner##################
+
 from django.utils import timezone
 
 def addbanner(request):
@@ -619,7 +684,7 @@ def delete_data_banner(request):
 
 
 
-#add course subject allocation
+###############add course subject allocation
 
 
 def addcsallo(request):
@@ -652,6 +717,17 @@ def delete_data_csallo(request):
         return JsonResponse({'status':0})
 
 
+def editcallo(request,id):
+    csa =course_subject_allocation.objects.get(id=id)
+    form=CourseSubjectAlloForm(instance=csa)
+    if request.method == 'POST':
+        form = CourseSubjectAlloForm(request.POST, request.FILES, instance=csa)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            return redirect('addcsallo') 
+    context = {'forms': form}
+    return render(request,'administration/csallo/editcsallo.html',context)
 
 #add course subject topic allocation
 
@@ -684,9 +760,22 @@ def delete_data_tcallo(request):
         return JsonResponse({'status':1})
     else:
         return JsonResponse({'status':0})
+    
+    
+def edittcallo(request,id):
+    tc =topic_course_allocation.objects.get(id=id)
+    form=topicCourseAlloForm(instance=tc)
+    if request.method == 'POST':
+        form = topicCourseAlloForm(request.POST, request.FILES, instance=tc)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            return redirect('addtcallo') 
+    context = {'forms': form}
+    return render(request,'administration/tcallo/edittcallo.html',context)
 
 
-
+############## add exam_master question allocation
 
 def addeqallo(request):
     if 'username' not in request.session:
@@ -716,6 +805,19 @@ def delete_data_eqallo(request):
         return JsonResponse({'status':1})
     else:
         return JsonResponse({'status':0})
+    
+    
+def editqallo(request,id):
+    crs =exam_question_allocation.objects.get(id=id)
+    form=emQuestionAlloForm(instance=crs)
+    if request.method == 'POST':
+        form = emQuestionAlloForm(request.POST, request.FILES, instance=crs)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            return redirect('addeqallo') 
+    context = {'forms': form}
+    return render(request,'administration/eqallo/editeqallo.html',context)
 
 ####### add notes ###################
 
@@ -756,9 +858,21 @@ def delete_data_notes(request):
         return JsonResponse({'status':0})
 
 
+def editnote(request,id):
+    crs =notes.objects.get(id=id)
+    form=notesform(instance=crs)
+    if request.method == 'POST':
+        form = notesform(request.POST, request.FILES, instance=crs)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            return redirect('addnote') 
+    context = {'forms': form}
+    return render(request,'administration/notes/editnote.html',context)
+
+#add syllabus 
 
 
-#add syllabus
 
 def addsyllabus(request):
     if 'username' not in request.session:
@@ -796,6 +910,17 @@ def delete_data_syllabus(request):
         return JsonResponse({'status':0})
 
 
+def editsyl(request,id):
+    crs =syllabus.objects.get(id=id)
+    form=syllabusform(instance=crs)
+    if request.method == 'POST':
+        form = syllabusform(request.POST, request.FILES, instance=crs)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            return redirect('addsyllabus') 
+    context = {'forms': form}
+    return render(request,'administration/syllabus/editsy.html',context)
 
 
 ################### Enquiry ########################
@@ -853,3 +978,16 @@ def delete_data_testimonial(request):
         return JsonResponse({'status':1})
     else:
         return JsonResponse({'status':0})
+
+
+def edittesti(request,id):
+    crs =testimonial.objects.get(id=id)
+    form=testimonialform(instance=crs)
+    if request.method == 'POST':
+        form = testimonialform(request.POST, request.FILES, instance=crs)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            return redirect('addtestimonial') 
+    context = {'forms': form}
+    return render(request,'administration/testimonial/edittesti.html',context)
