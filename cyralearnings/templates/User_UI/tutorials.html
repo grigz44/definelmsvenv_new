@@ -116,7 +116,7 @@
                                 <div id="comments1"></div>
                                 <div id="comm">
                                 {% for st in com %} 
-                                <div class="bg-white p-2">
+                                <!-- <div class="bg-white p-2">
                                         <div class="d-flex flex-row user-info"><img class="rounded-circle" src="{% static 'userui/img/Profile.png' %}" width="30" height="30">
                                             <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name">{{st.user}}</span><span class="date text-black-50">Shared publicly - {{st.datetime}}</span></div>
                                         </div>
@@ -128,15 +128,14 @@
                                         <div class="d-flex flex-row fs-12">
                                             
                                         </div>
-                                    </div> 
+                                    </div>  -->
                                 {% endfor %}
-                            </div>
-                    </div>
+                    </div></div>
                             <div class=" p-2">
                                 {% csrf_token %}
                                 <form>
                                 <table><tr>
-                                    <td><textarea name="w3review" rows="4" cols="50" id="comment" style="resize: none;"></textarea></td>
+                                    <td><textarea name="w3review" rows="4" cols="50" id="comment" style="resize: none;" required></textarea></td>
                                     <td style="vertical-align: bottom;padding-bottom: 8.9px;"><button type="button" id="btncomment"  class="btn-btn">Comment</button></td>
                                     </tr>
                                 </table>
@@ -239,6 +238,7 @@ $('#btncomment').click(function(){
                 data: mydata,
     
                 success:function(data){
+                    $('#comm').empty();
                  // console.log(data.status)
                  x = data.student_data;
     
@@ -270,144 +270,61 @@ $('#btncomment').click(function(){
 
 })
 
-//         $(document).ready(function() {
-// $("#btncomment").click(function() {
-
-
-// var id = $("#id").val();
-// var comment = $("#comment").val();
-// var user = $("#user").val();
-
-// // alert(id);
-// // alert(comment);
-
-
-// $.ajax(
-//     {
-//         type:"POST",
-//         url: "http://localhost:8000/lms/commentpost/",
-//         data:{
-//             video: id,
-//             comment:comment,
-//             user:user
-
-//         },
+$(".video").on('click', function(){
+    output ="";
         
-//         success: function( data ) 
-//         {   
-//             $('form')[0].reset();
-
-//             const commentElements = data.map(comment => {
-//   return `
-//             <div class="bg-white p-2">
-//               <div class="d-flex flex-row user-info">
-//                 <img class="rounded-circle" src="{% static 'userui/img/Profile.png' %}" width="30" height="30">
-//                 <div class="d-flex flex-column justify-content-start ml-2">
-//                   <span class="d-block font-weight-bold name">${comment.user}</span>
-//                   <span class="date text-black-50">Shared publicly - ${comment.datetime}</span>
-//                 </div>
-//               </div>
-//               <div class="mt-2">
-//                 <p class="comment-text">${comment.comment}</p>
-//               </div>
-//             </div>
-//           `;
-//         });
-//         // Append comments to the DOM
-//         $('#comment-container').append(commentElements.join(''));
-//       },
-//         })
+        let l = $('#video').val();
+        console.log(l);
+       
     
-//     });
+        if(l == ""){
+            console.log("Please Enter Name");
+        }else{
+           
+            console.log(l);
+            
     
-
-
-// });
-
-
-
-// $(document).ready(function() {
-
-// $.ajax({
-//     url: 'http://localhost:8000/lms/commentpost/',
-//     type: 'GET',
-//     dataType: 'json',
-//     success: function(data) {
-//     console.log(data); // Output response data to console
-//         // Iterate through comments and display them
-//         // $.each(data.videocomment, function(index, comment) {
-//         //     $('#comments').append('<div class="comment"><strong>' + comment.comment + '</strong>: ' + comment.comment + '</div>');
-//         // });
+            myda = { video:l};
+    
+$.ajax({
+    url: 'http://localhost:8000/lms/commentget/',
+    method: "POST",
+    data: myda,
+    success: function(data) {
+        $('#comm').empty();
+        // Handle successful response
+        console.log(data); // Output response data to console
+        // Iterate through comments and display them
+        // $.each(data.videocomment, function(index, comment) {
+        //     $('#comments').append('<div class="comment"><strong>' + comment.comment + '</strong>: ' + comment.comment + '</div>');
+        // });
         
-//         const commentElements = data.map(comment => {
-//   return `
-//             <div class="bg-white p-2">
-//               <div class="d-flex flex-row user-info">
-//                 <img class="rounded-circle" src="{% static 'userui/img/Profile.png' %}" width="30" height="30">
-//                 <div class="d-flex flex-column justify-content-start ml-2">
-//                   <span class="d-block font-weight-bold name">${comment.user}</span>
-//                   <span class="date text-black-50">Shared publicly - ${comment.datetime}</span>
-//                 </div>
-//               </div>
-//               <div class="mt-2">
-//                 <p class="comment-text">${comment.comment}</p>
-//               </div>
-//             </div>
-//           `;
-//         });
-//         // Append comments to the DOM
-//         $('#comment-container').append(commentElements.join(''));
-//       },
-//     error: function(xhr, textStatus, errorThrown) {
-//         // Handle error response
-//         console.log('Error: ' + errorThrown);
-//     }
-// });
-// });
+        const commentElements = data.map(comment => {
+  return  `
+            <div class="bg-white p-2">
+              <div class="d-flex flex-row user-info">
+                <img class="rounded-circle" src="{% static 'userui/img/Profile.png' %}" width="30" height="30">
+                <div class="d-flex flex-column justify-content-start ml-2">
+                  <span class="d-block font-weight-bold name">${comment.user}</span>
+                  <span class="date text-black-50">Shared publicly - ${comment.datetime}</span>
+                </div>
+              </div>
+              <div class="mt-2">
+                <p class="comment-text">${comment.comment}</p>
+              </div>
+            </div>
+          `;
+        });
+        // Append comments to the DOM
+        $('#comm').append(commentElements.join(''));
+      },
+    error: function(xhr, textStatus, errorThrown) {
+        // Handle error response
+        console.log('Error: ' + errorThrown);
+    }
+});}
+});
 
-
-
-// $(document).ready(function() {
-// $("#btncomment").on('click', function(){
-    
-// $.ajax({
-//     url: 'http://localhost:8000/lms/commentpost/',
-//     type: 'GET',
-//     dataType: 'json',
-//     success: function(data) {
-//         // Handle successful response
-//         console.log(data); // Output response data to console
-//         // Iterate through comments and display them
-//         // $.each(data.videocomment, function(index, comment) {
-//         //     $('#comments').append('<div class="comment"><strong>' + comment.comment + '</strong>: ' + comment.comment + '</div>');
-//         // });
-        
-//         const commentElements = data.map(comment => {
-//   return  `
-//             <div class="bg-white p-2">
-//               <div class="d-flex flex-row user-info">
-//                 <img class="rounded-circle" src="{% static 'userui/img/Profile.png' %}" width="30" height="30">
-//                 <div class="d-flex flex-column justify-content-start ml-2">
-//                   <span class="d-block font-weight-bold name">${comment.user}</span>
-//                   <span class="date text-black-50">Shared publicly - ${comment.datetime}</span>
-//                 </div>
-//               </div>
-//               <div class="mt-2">
-//                 <p class="comment-text">${comment.comment}</p>
-//               </div>
-//             </div>
-//           `;
-//         });
-//         // Append comments to the DOM
-//         $('#comment-container').append(commentElements.join(''));
-//       },
-//     error: function(xhr, textStatus, errorThrown) {
-//         // Handle error response
-//         console.log('Error: ' + errorThrown);
-//     }
-// });
-// });
-// });
 
  
     </script>

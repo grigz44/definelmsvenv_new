@@ -232,7 +232,7 @@ def save_data_comment(request):
         lg=login.objects.get(id=user)
         vid=video_class.objects.get(id=(videoo))
         s = videocomment.objects.create(comment=commentt, video=vid, user=lg)
-        exm = videocomment.objects.filter(video=videoo).select_related('user').values('id', 'video_id', 'user__username', 'datetime', 'comment')
+        exm = videocomment.objects.filter(video=videoo).select_related('user').values('id', 'video', 'user__username', 'datetime', 'comment')
         student_data = list(exm)
         for comment in student_data:
             comment['datetime'] = comment['datetime'].strftime('%b %d %Y %I:%M %p')
