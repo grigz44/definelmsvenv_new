@@ -3,7 +3,7 @@ from requests import post
 from lmsmainapp.forms import *
 from lmsmainapp.models import *
 from django.contrib.auth import logout
-
+from lmsmainapp.serializers import *
 
 
 
@@ -220,3 +220,22 @@ def contact(request):
             form = enquiryForm()
         context = {'form': form}
         return render(request, 'User_UI/contact.html',context)
+
+
+
+@csrf_exempt
+def save_data_comment(request):
+    if request.method == 'POST':
+        commentt = request.POST['comment']
+        videoo = request.POST['video']
+        user = request.POST['user']
+        lg=login.objects.get(id=user)
+        vid=video_class.objects.get(id=(videoo))
+        s = videocomment.objects.create(comment=commentt, video=vid, user=lg)
+        exm = videocomment.objects.filter(video=videoo).select_related('user').values('id', 'video_id', 'user__username', 'datetime', 'comment')
+        student_data = list(exm)
+        for comment in student_data:
+            comment['datetime'] = comment['datetime'].strftime('%b %d %Y %I:%M %p')
+        return JsonResponse({'status':'Data Saved', 'student_data':student_data})
+    else:
+        return JsonResponse({'status':'Not Saved'})

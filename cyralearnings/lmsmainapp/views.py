@@ -709,10 +709,10 @@ class commentview(APIView):
     def get(self,request,id=None):
         if id is not None:
             subjects = videocomment.objects.get(id=id)
-            serializer = CommentSerializer(subjects)
+            serializer = CommentSerializer2(subjects)
             return Response(serializer.data) 
         subjects = videocomment.objects.all()       
-        serializer = CommentSerializer(subjects,many=True)
+        serializer = CommentSerializer2(subjects,many=True)
         return Response(serializer.data)
 
 

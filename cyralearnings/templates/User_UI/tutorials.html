@@ -114,25 +114,24 @@
                             
                             <div style="overflow-y:auto; height: auto; width: 900px;max-height: 400px;" class="example">
                                 <div id="comments1"></div>
-                                {% for st in com %}
+                                <div id="comm">
+                                {% for st in com %} 
                                 <div class="bg-white p-2">
-                                    <div class="d-flex flex-row user-info"><img class="rounded-circle" src="{% static 'userui/img/Profile.png' %}" width="30" height="30">
-                                        <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name">{{st.user}}</span><span class="date text-black-50">Shared publicly - {{st.datetime}}</span></div>
+                                        <div class="d-flex flex-row user-info"><img class="rounded-circle" src="{% static 'userui/img/Profile.png' %}" width="30" height="30">
+                                            <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name">{{st.user}}</span><span class="date text-black-50">Shared publicly - {{st.datetime}}</span></div>
+                                        </div>
+                                        <div class="mt-2">
+                                            <p class="comment-text">{{st.comment}}</p>
+                                        </div>
                                     </div>
-                                    <div class="mt-2">
-                                        <p class="comment-text">{{st.comment}}</p>
-                                    </div>
-                                </div>
-                                <div class="bg-white">
-                                    <div class="d-flex flex-row fs-12">
-                                        <!-- <div class="like p-2 cursor"><i class="fa fa-thumbs-o-up"></i><span class="ml-1">Like</span></div>
-                                        <div class="like p-2 cursor"><i class="fa fa-commenting-o"></i><span class="ml-1">Comment</span></div>
-                                        <div class="like p-2 cursor"><i class="fa fa-share"></i><span class="ml-1">Share</span></div> -->
-                                    </div>
-                                </div> 
+                                    <div class="bg-white">
+                                        <div class="d-flex flex-row fs-12">
+                                            
+                                        </div>
+                                    </div> 
                                 {% endfor %}
                             </div>
-                            
+                    </div>
                             <div class=" p-2">
                                 {% csrf_token %}
                                 <form>
@@ -142,7 +141,7 @@
                                     </tr>
                                 </table>
                             </form>
-                            <input type="hidden" name="selectedvalue" id="id">
+                            <input type="hidden" name="video" id="video">
                             <input type="hidden" name="" id="user" value="{{userid}}">
                             </div>
                         </div>
@@ -189,7 +188,7 @@
      </div>
     </div>
     
-
+    
     <!-- Footer Start -->
     {% include 'User_UI/footer.html' %}
     <!-- Footer End -->
@@ -204,7 +203,7 @@
         //const main_video=document.getElementById("iframe");
         const main_video_title = document.querySelector('.main-video-container .title');
         const video_playlist = document.querySelector('.video-playlist .videos');
-        const selectElement = document.querySelector('input[name="selectedvalue"]');
+        const selectElement = document.querySelector('input[name="video"]');
         let videos = document.querySelectorAll('.video');
         let length =  videos.length;
         videos.forEach(selected_video => {
@@ -214,43 +213,203 @@
                 selectElement.value=selected_video.dataset.id;
             }
         });
+$('#btncomment').click(function(){
+        //console.log("Button Save Clicked");
+        output ="";
+        let n = $('#comment').val();
+        let e = $('#video').val();
+        let c = $('#user').val();
+    
+        if(n == ""){
+            console.log("Please Enter Name");
+        }else if(e == ""){
+            console.log("Please Enter Email");
+        }else if(c == ""){
+            console.log("Please Enter Course");
+        }else{
+            console.log(n);
+            console.log(e);
+            console.log(c);
+    
+            mydata = { comment:n, video:e, user:c};
+    
+            $.ajax({
+                url: "{% url 'savecom' %}",
+                method: "POST",
+                data: mydata,
+    
+                success:function(data){
+                 // console.log(data.status)
+                 x = data.student_data;
+    
+                 if(data.status == 'Data Saved'){
+                     console.log('Data Submitted');
+                    console.log(x)
+                     for(i=0; i<x.length; i++){
+                         output += 
+                            "<div class='bg-white p-2'><div class='d-flex flex-row user-info'><img class='rounded-circle' src='{% static 'userui/img/Profile.png' %}' width='30' height='30'><div class='d-flex flex-column justify-content-start ml-2'><span class='d-block font-weight-bold name'>" + x[i].user__username +
+                            "</span><span class='date text-black-50'>Shared publicly - " + x[i].datetime +
+                            "</span></div></div><div class='mt-2'><p class='comment-text'>" + x[i].comment +
+                            "</p></div></div><div class='bg-white'><div class='d-flex flex-row fs-12'></div></div> "
+                     }
+                     $('#comm').html(output);
+                     $('#exmid').val("");
+                     $('form')[0].reset();
+                 }
+    
+                 if(data.status == 'Not Saved'){
+                     console.log('Unable Submit Data');
+                     $('#exmid').val("");
+                 }
+    
+    
+    
+                }
+            });
+ }
 
-        $(document).ready(function() {
-$("#btncomment").click(function() {
+})
+
+//         $(document).ready(function() {
+// $("#btncomment").click(function() {
 
 
-var id = $("#id").val();
-var comment = $("#comment").val();
-var user = $("#user").val();
+// var id = $("#id").val();
+// var comment = $("#comment").val();
+// var user = $("#user").val();
 
-// alert(id);
-// alert(comment);
+// // alert(id);
+// // alert(comment);
 
 
-$.ajax(
-    {
-        type:"POST",
-        url: "http://localhost:8000/lms/commentpost/",
-        data:{
-            video: id,
-            comment:comment,
-            user:user
+// $.ajax(
+//     {
+//         type:"POST",
+//         url: "http://localhost:8000/lms/commentpost/",
+//         data:{
+//             video: id,
+//             comment:comment,
+//             user:user
 
-        },
+//         },
         
-        success: function( data ) 
-        {   
-            $('form')[0].reset();
+//         success: function( data ) 
+//         {   
+//             $('form')[0].reset();
 
-            
-        }
-    })
+//             const commentElements = data.map(comment => {
+//   return `
+//             <div class="bg-white p-2">
+//               <div class="d-flex flex-row user-info">
+//                 <img class="rounded-circle" src="{% static 'userui/img/Profile.png' %}" width="30" height="30">
+//                 <div class="d-flex flex-column justify-content-start ml-2">
+//                   <span class="d-block font-weight-bold name">${comment.user}</span>
+//                   <span class="date text-black-50">Shared publicly - ${comment.datetime}</span>
+//                 </div>
+//               </div>
+//               <div class="mt-2">
+//                 <p class="comment-text">${comment.comment}</p>
+//               </div>
+//             </div>
+//           `;
+//         });
+//         // Append comments to the DOM
+//         $('#comment-container').append(commentElements.join(''));
+//       },
+//         })
+    
+//     });
+    
 
 
-});
-});
+// });
 
 
+
+// $(document).ready(function() {
+
+// $.ajax({
+//     url: 'http://localhost:8000/lms/commentpost/',
+//     type: 'GET',
+//     dataType: 'json',
+//     success: function(data) {
+//     console.log(data); // Output response data to console
+//         // Iterate through comments and display them
+//         // $.each(data.videocomment, function(index, comment) {
+//         //     $('#comments').append('<div class="comment"><strong>' + comment.comment + '</strong>: ' + comment.comment + '</div>');
+//         // });
+        
+//         const commentElements = data.map(comment => {
+//   return `
+//             <div class="bg-white p-2">
+//               <div class="d-flex flex-row user-info">
+//                 <img class="rounded-circle" src="{% static 'userui/img/Profile.png' %}" width="30" height="30">
+//                 <div class="d-flex flex-column justify-content-start ml-2">
+//                   <span class="d-block font-weight-bold name">${comment.user}</span>
+//                   <span class="date text-black-50">Shared publicly - ${comment.datetime}</span>
+//                 </div>
+//               </div>
+//               <div class="mt-2">
+//                 <p class="comment-text">${comment.comment}</p>
+//               </div>
+//             </div>
+//           `;
+//         });
+//         // Append comments to the DOM
+//         $('#comment-container').append(commentElements.join(''));
+//       },
+//     error: function(xhr, textStatus, errorThrown) {
+//         // Handle error response
+//         console.log('Error: ' + errorThrown);
+//     }
+// });
+// });
+
+
+
+// $(document).ready(function() {
+// $("#btncomment").on('click', function(){
+    
+// $.ajax({
+//     url: 'http://localhost:8000/lms/commentpost/',
+//     type: 'GET',
+//     dataType: 'json',
+//     success: function(data) {
+//         // Handle successful response
+//         console.log(data); // Output response data to console
+//         // Iterate through comments and display them
+//         // $.each(data.videocomment, function(index, comment) {
+//         //     $('#comments').append('<div class="comment"><strong>' + comment.comment + '</strong>: ' + comment.comment + '</div>');
+//         // });
+        
+//         const commentElements = data.map(comment => {
+//   return  `
+//             <div class="bg-white p-2">
+//               <div class="d-flex flex-row user-info">
+//                 <img class="rounded-circle" src="{% static 'userui/img/Profile.png' %}" width="30" height="30">
+//                 <div class="d-flex flex-column justify-content-start ml-2">
+//                   <span class="d-block font-weight-bold name">${comment.user}</span>
+//                   <span class="date text-black-50">Shared publicly - ${comment.datetime}</span>
+//                 </div>
+//               </div>
+//               <div class="mt-2">
+//                 <p class="comment-text">${comment.comment}</p>
+//               </div>
+//             </div>
+//           `;
+//         });
+//         // Append comments to the DOM
+//         $('#comment-container').append(commentElements.join(''));
+//       },
+//     error: function(xhr, textStatus, errorThrown) {
+//         // Handle error response
+//         console.log('Error: ' + errorThrown);
+//     }
+// });
+// });
+// });
+
+ 
     </script>
 
 

@@ -159,7 +159,8 @@ CORS_ORIGIN_WHITELIST = [
 REST_FRAMEWORK = { 
 'DEFAULT_AUTHENTICATION_CLASSES': ( 
  'rest_framework_simplejwt.authentication.JWTAuthentication', 
- ) 
+ ) ,
+ 'DATETIME_FORMAT': "%b %d %Y %I:%M %p",
 }
 
 from datetime import timedelta 
