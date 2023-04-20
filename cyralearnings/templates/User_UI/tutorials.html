@@ -107,29 +107,14 @@
            <label for="tab-1">Comments</label>
            <div class="tab__content">
               <h4>Comments</h4>
-              <div class="container mt-5">
+              <div class="container mt-5 com">
                 <div class="d-flex justify-content-center row">
                     <div class="col-md-8">
                         <div class="d-flex flex-column comment-section">
                             
                             <div style="overflow-y:auto; height: auto; width: 900px;max-height: 400px;" class="example">
-                                <div id="comments1"></div>
-                                <div id="comm">
-                                {% for st in com %} 
-                                <!-- <div class="bg-white p-2">
-                                        <div class="d-flex flex-row user-info"><img class="rounded-circle" src="{% static 'userui/img/Profile.png' %}" width="30" height="30">
-                                            <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name">{{st.user}}</span><span class="date text-black-50">Shared publicly - {{st.datetime}}</span></div>
-                                        </div>
-                                        <div class="mt-2">
-                                            <p class="comment-text">{{st.comment}}</p>
-                                        </div>
-                                    </div>
-                                    <div class="bg-white">
-                                        <div class="d-flex flex-row fs-12">
-                                            
-                                        </div>
-                                    </div>  -->
-                                {% endfor %}
+                                <div id="comm" >
+
                     </div></div>
                             <div class=" p-2">
                                 {% csrf_token %}
@@ -164,10 +149,7 @@
            <label for="tab-3">NOTES</label>
            <div class="tab__content">
             <h4>Notes</h4>
-            {% for pdf in pdf %}
-            <p>
-			<a href="{{pdf.pdf_file.url}}"download>{{pdf.notename}}</a></p>
-            {% endfor %}
+            <div id="g"></div>
            </div> 
         </div>
         <div class="tab">
@@ -195,7 +177,7 @@
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.8.335/pdf.min.js"></script>
     <script>
         
         const main_video = document.querySelector('.main-video iframe');
@@ -326,12 +308,58 @@ $.ajax({
 });
 
 
+
+$(".video").on('click', function(){
+    output ="";
+        
+        let k = $('#video').val();
+        console.log(k);
+       
+    
+        if(k == ""){
+            console.log("Please Enter video");
+        }else{
+           
+            console.log(k);
+            
+    
+            myd = { video:k};
+    
+$.ajax({
+    url: 'http://localhost:8000/lms/notes/',
+    method: "POST",
+    data: myd,
+    success: function(data) {
+        $('#g').empty();
+        // Handle successful response
+        console.log(data); // Output response data to console
+        // Iterate through comments and display them
+        // $.each(data.videocomment, function(index, comment) {
+        //     $('#comments').append('<div class="comment"><strong>' + comment.comment + '</strong>: ' + comment.comment + '</div>');
+        // });
+        
+        const commentElements = data.map(comment => {
+  return  `
+    
+                  <a href="${comment.pdf_file}" target="_blank">${comment.notename}</a>
+          `;
+        });
+        // Append comments to the DOM
+        $('#g').append(commentElements.join(''));
+      },
+    error: function(xhr, textStatus, errorThrown) {
+        // Handle error response
+        console.log('Error: ' + errorThrown);
+    }
+});}
+});
+
  
     </script>
 
 
 
-
+    
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

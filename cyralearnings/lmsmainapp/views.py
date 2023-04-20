@@ -174,7 +174,7 @@ from rest_framework.permissions import IsAuthenticated
 class examView(APIView):
 
     # authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     
     def get(self,request,id=None):
         if id is not None:
@@ -882,11 +882,7 @@ class bannerView(APIView):
 
 class GetResultView(APIView):
 
-    def get(self, request):
-        
-        data = examresult.objects.all()
-        serializer = ExamrsltSerializer(data, many=True)
-        return Response(serializer.data)
+   
 
 
     def post(self,req):
